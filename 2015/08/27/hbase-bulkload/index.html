@@ -3,17 +3,24 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Hexo</title>
+  <title>hbase bulkload 相关整理 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://yoursite.com/index.html">
+  <meta name="description" content="由于近期Team内有同学用到bulkload,整理了一下过往我用到的bulkload的相关使用经验基于hbase 0.90和0.94版本做一些简单的分析，可供参考。  
+1. 概述官方说明[0.94官方说明] (http://hbase.apache.org/0.94/book/arch.bulk.load.html)  
+简单的说，bluk load 是能够批量加载hfile =&amp;gt; hba">
+<meta property="og:type" content="article">
+<meta property="og:title" content="hbase bulkload 相关整理">
+<meta property="og:url" content="http://yoursite.com/2015/08/27/hbase-bulkload/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description">
+<meta property="og:description" content="由于近期Team内有同学用到bulkload,整理了一下过往我用到的bulkload的相关使用经验基于hbase 0.90和0.94版本做一些简单的分析，可供参考。  
+1. 概述官方说明[0.94官方说明] (http://hbase.apache.org/0.94/book/arch.bulk.load.html)  
+简单的说，bluk load 是能够批量加载hfile =&amp;gt; hba">
+<meta property="og:updated_time" content="2015-08-27T06:12:16.170Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo">
-<meta name="twitter:description">
+<meta name="twitter:title" content="hbase bulkload 相关整理">
+<meta name="twitter:description" content="由于近期Team内有同学用到bulkload,整理了一下过往我用到的bulkload的相关使用经验基于hbase 0.90和0.94版本做一些简单的分析，可供参考。  
+1. 概述官方说明[0.94官方说明] (http://hbase.apache.org/0.94/book/arch.bulk.load.html)  
+简单的说，bluk load 是能够批量加载hfile =&amp;gt; hba">
   
     <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -59,9 +66,7 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-    <article id="post-hbase-bulkload" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-hbase-bulkload" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2015/08/27/hbase-bulkload/" class="article-date">
   <time datetime="2015-08-27T06:08:11.000Z" itemprop="datePublished">2015-08-27</time>
@@ -74,8 +79,8 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/08/27/hbase-bulkload/">hbase bulkload 相关整理</a>
+    <h1 class="article-title" itemprop="name">
+      hbase bulkload 相关整理
     </h1>
   
 
@@ -125,48 +130,20 @@ c)  加载。
     </footer>
   </div>
   
-</article>
-
-
+    
+<nav id="article-nav">
   
-    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/08/27/hello-world/" class="article-date">
-  <time datetime="2015-08-27T06:08:11.000Z" itemprop="datePublished">2015-08-27</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/08/27/hello-world/">Hello World , Hello PPG , Hello Sunshine</a>
-    </h1>
+    <a href="/2015/08/27/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Hello World , Hello PPG , Hello Sunshine</div>
+    </a>
   
+</nav>
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>You are always my sunshine…</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/08/27/hello-world/" data-id="cidtthf4a0003fggt3slcukdp" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
   
 </article>
 
-
-  
-  
 </section>
         
           <aside id="sidebar">
