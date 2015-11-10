@@ -13,10 +13,10 @@ zookeeper 3.5以下的版本，会在客户端并发链接的时候，有一定�
 
 原因: 
 -> 1)   归根结底，是因为DNS解析的问题。 可参考:
-[issue 1891](https://issues.apache.org/jira/browse/ZOOKEEPER-1666)   
+[issue 1666](https://issues.apache.org/jira/browse/ZOOKEEPER-1666)   
 
 -> 2)   1366 issue在3.4.6已经fix，但是和它相关的另一个issue，只有在3.5才fix 
-[issue 1891](https://issues.apache.org/jira/browse/ZOOKEEPER-1891)  
+[issue 1666](https://issues.apache.org/jira/browse/ZOOKEEPER-1891)  
 
 
 # 案例与解释  

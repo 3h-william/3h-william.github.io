@@ -13,7 +13,7 @@
 <meta property="og:site_name" content="3h_William">
 <meta property="og:description" content="背景最近在查询一个和zookeeper相关的case。追查结果是一个称之为”Reverse DNS lookup”的问题。可以称之为:反向DNS查找。 https://en.wikipedia.org/wiki/Reverse_DNS_lookup
 隐患zookeeper 3.5以下的版本，会在客户端并发链接的时候，有一定几率发生stuck，随着并发连接的增多，发生概率越大。尤其是第一次创建连接的">
-<meta property="og:updated_time" content="2015-11-10T01:37:42.693Z">
+<meta property="og:updated_time" content="2015-11-10T01:43:06.907Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用Zookeeper过程中遇到客户端stuck的问题和解决建议">
 <meta name="twitter:description" content="背景最近在查询一个和zookeeper相关的case。追查结果是一个称之为”Reverse DNS lookup”的问题。可以称之为:反向DNS查找。 https://en.wikipedia.org/wiki/Reverse_DNS_lookup
@@ -91,8 +91,8 @@
       
         <h1 id="背景">背景</h1><p>最近在查询一个和zookeeper相关的case。追查结果是一个称之为”Reverse DNS lookup”的问题。<br>可以称之为:反向DNS查找。 <a href="https://en.wikipedia.org/wiki/Reverse_DNS_lookup" target="_blank" rel="external">https://en.wikipedia.org/wiki/Reverse_DNS_lookup</a></p>
 <h1 id="隐患">隐患</h1><p>zookeeper 3.5以下的版本，会在客户端并发链接的时候，有一定几率发生stuck，随着并发连接的增多，发生概率越大。尤其是第一次创建连接的时候。<br>(因为zookeeper的client版本和server的版本兼容性，可以先升级客户端，客户端版本&gt;服务端版本，是支持的)</p>
-<p>原因:<br>-&gt; 1)   归根结底，是因为DNS解析的问题。 可参考:<br><a href="https://issues.apache.org/jira/browse/ZOOKEEPER-1666" target="_blank" rel="external">issue 1891</a>   </p>
-<p>-&gt; 2)   1366 issue在3.4.6已经fix，但是和它相关的另一个issue，只有在3.5才fix<br><a href="https://issues.apache.org/jira/browse/ZOOKEEPER-1891" target="_blank" rel="external">issue 1891</a>  </p>
+<p>原因:<br>-&gt; 1)   归根结底，是因为DNS解析的问题。 可参考:<br><a href="https://issues.apache.org/jira/browse/ZOOKEEPER-1666" target="_blank" rel="external">issue 1666</a>   </p>
+<p>-&gt; 2)   1666 issue在3.4.6已经fix，但是和它相关的另一个issue，只有在3.5才fix<br><a href="https://issues.apache.org/jira/browse/ZOOKEEPER-1891" target="_blank" rel="external">issue 1891</a>  </p>
 <h1 id="案例与解释">案例与解释</h1><p>简单的来说，问题出在 “通过IP找HostName”，上， 例如: 通过”10.x.x.x”找到”hadoopXXX” 这个方法上。<br>在计算机网络中，我们可以用ip也可以用HostName来表明一台唯一的机器，我们也知道有一个叫做DNS的服务来帮助我们将IP转化为hostName. <strong>但是，这一个转换是有开销的</strong>。<br>是需要通过上层的DNS服务器或者IP机器本身的网卡来达到映射。<br>至于细节，可以参考wiki  </p>
 <p>接下来，我们可以本地来模拟这个过程:<br>我们用Java可以启动以下代码，其中，注释的两行是两种构建方式。  </p>
 <figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">        for<span class="list">(<span class="keyword">int</span> i=0<span class="comment">;i&lt;100;i++)&#123;</span></span><br><span class="line">            new Thread<span class="list">(<span class="keyword">new</span> Runnable<span class="list">()</span> &#123;</span><br><span class="line">                @Override</span><br><span class="line">                public void run<span class="list">()</span> &#123;</span><br><span class="line">//   <span class="number">1</span>                 InetSocketAddress ia = new InetSocketAddress<span class="list">( <span class="string">"10.x.x.x"</span>,<span class="number">2181</span>)</span><span class="comment">;;</span></span><br><span class="line">//   <span class="number">2</span>                 InetSocketAddress ia = new InetSocketAddress<span class="list">( <span class="string">"hadoopXXX/10.x.x.x"</span>,<span class="number">2181</span>)</span><span class="comment">;</span></span><br><span class="line">                    System.out.println<span class="list">(<span class="keyword">ia</span>.getHostName<span class="list">()</span>)</span><span class="comment">;</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;)</span>.start<span class="list">()</span><span class="comment">;</span></span><br><span class="line">        &#125;</span></span><br></pre></td></tr></table></figure>
@@ -107,7 +107,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/11/10/zookeeper_stuck_dns_network/" data-id="cigspks7g0003uogt9rvgah5c" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/11/10/zookeeper_stuck_dns_network/" data-id="cigsprj1j0003l8gt7ka4v6b6" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/zookeeper/">zookeeper</a></li></ul>
