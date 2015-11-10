@@ -1,0 +1,5 @@
+hexo clean
+hexo generate
+hexo server
+
+copy source to public folder

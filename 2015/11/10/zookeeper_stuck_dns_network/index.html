@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>使用Zookeeper过程中遇到客户端stuck的问题和解决建议 | 3h_William</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="背景最近在查询一个和zookeeper相关的case。追查结果是一个称之为”Reverse DNS lookup”的问题。可以称之为:反向DNS查找。 https://en.wikipedia.org/wiki/Reverse_DNS_lookup
+隐患zookeeper 3.5以下的版本，会在客户端并发链接的时候，有一定几率发生stuck，随着并发连接的增多，发生概率越大。尤其是第一次创建连接的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用Zookeeper过程中遇到客户端stuck的问题和解决建议">
+<meta property="og:url" content="http://yoursite.com/2015/11/10/zookeeper_stuck_dns_network/index.html">
+<meta property="og:site_name" content="3h_William">
+<meta property="og:description" content="背景最近在查询一个和zookeeper相关的case。追查结果是一个称之为”Reverse DNS lookup”的问题。可以称之为:反向DNS查找。 https://en.wikipedia.org/wiki/Reverse_DNS_lookup
+隐患zookeeper 3.5以下的版本，会在客户端并发链接的时候，有一定几率发生stuck，随着并发连接的增多，发生概率越大。尤其是第一次创建连接的">
+<meta property="og:updated_time" content="2015-11-10T01:37:42.693Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用Zookeeper过程中遇到客户端stuck的问题和解决建议">
+<meta name="twitter:description" content="背景最近在查询一个和zookeeper相关的case。追查结果是一个称之为”Reverse DNS lookup”的问题。可以称之为:反向DNS查找。 https://en.wikipedia.org/wiki/Reverse_DNS_lookup
+隐患zookeeper 3.5以下的版本，会在客户端并发链接的时候，有一定几率发生stuck，随着并发连接的增多，发生概率越大。尤其是第一次创建连接的">
+  
+    <link rel="alternative" href="/atom.xml" title="3h_William" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  
+
+</head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">3h_William</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">Hello Sunshine</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-zookeeper_stuck_dns_network" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/11/10/zookeeper_stuck_dns_network/" class="article-date">
+  <time datetime="2015-11-10T01:18:11.000Z" itemprop="datePublished">2015-11-10</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      使用Zookeeper过程中遇到客户端stuck的问题和解决建议
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="背景">背景</h1><p>最近在查询一个和zookeeper相关的case。追查结果是一个称之为”Reverse DNS lookup”的问题。<br>可以称之为:反向DNS查找。 <a href="https://en.wikipedia.org/wiki/Reverse_DNS_lookup" target="_blank" rel="external">https://en.wikipedia.org/wiki/Reverse_DNS_lookup</a></p>
+<h1 id="隐患">隐患</h1><p>zookeeper 3.5以下的版本，会在客户端并发链接的时候，有一定几率发生stuck，随着并发连接的增多，发生概率越大。尤其是第一次创建连接的时候。<br>(因为zookeeper的client版本和server的版本兼容性，可以先升级客户端，客户端版本&gt;服务端版本，是支持的)</p>
+<p>原因:<br>-&gt; 1)   归根结底，是因为DNS解析的问题。 可参考:<br><a href="https://issues.apache.org/jira/browse/ZOOKEEPER-1666" target="_blank" rel="external">issue 1891</a>   </p>
+<p>-&gt; 2)   1366 issue在3.4.6已经fix，但是和它相关的另一个issue，只有在3.5才fix<br><a href="https://issues.apache.org/jira/browse/ZOOKEEPER-1891" target="_blank" rel="external">issue 1891</a>  </p>
+<h1 id="案例与解释">案例与解释</h1><p>简单的来说，问题出在 “通过IP找HostName”，上， 例如: 通过”10.x.x.x”找到”hadoopXXX” 这个方法上。<br>在计算机网络中，我们可以用ip也可以用HostName来表明一台唯一的机器，我们也知道有一个叫做DNS的服务来帮助我们将IP转化为hostName. <strong>但是，这一个转换是有开销的</strong>。<br>是需要通过上层的DNS服务器或者IP机器本身的网卡来达到映射。<br>至于细节，可以参考wiki  </p>
+<p>接下来，我们可以本地来模拟这个过程:<br>我们用Java可以启动以下代码，其中，注释的两行是两种构建方式。  </p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">        for<span class="list">(<span class="keyword">int</span> i=0<span class="comment">;i&lt;100;i++)&#123;</span></span><br><span class="line">            new Thread<span class="list">(<span class="keyword">new</span> Runnable<span class="list">()</span> &#123;</span><br><span class="line">                @Override</span><br><span class="line">                public void run<span class="list">()</span> &#123;</span><br><span class="line">//   <span class="number">1</span>                 InetSocketAddress ia = new InetSocketAddress<span class="list">( <span class="string">"10.x.x.x"</span>,<span class="number">2181</span>)</span><span class="comment">;;</span></span><br><span class="line">//   <span class="number">2</span>                 InetSocketAddress ia = new InetSocketAddress<span class="list">( <span class="string">"hadoopXXX/10.x.x.x"</span>,<span class="number">2181</span>)</span><span class="comment">;</span></span><br><span class="line">                    System.out.println<span class="list">(<span class="keyword">ia</span>.getHostName<span class="list">()</span>)</span><span class="comment">;</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;)</span>.start<span class="list">()</span><span class="comment">;</span></span><br><span class="line">        &#125;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>当使用注释第一行的时候，线程是有很大的几率发生stuck.  </li>
+<li>当使用注释第二行的时候，是不会有这个问题。<br>而不凑巧对的是，zookeeper3.5以下的版本中，是存在第一行注释的代码的。因此，问题就产生了。  </li>
+</ul>
+<hr>
+<p>作者：3h-william<br>联系: <a href="https://github.com/3h-william" target="_blank" rel="external">https://github.com/3h-william</a><br>出处：<a href="http://3h-william.github.io" target="_blank" rel="external">http://3h-william.github.io</a>  </p>
+<hr>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/11/10/zookeeper_stuck_dns_network/" data-id="cigspks7g0003uogt9rvgah5c" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/zookeeper/">zookeeper</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2015/09/11/sqoop_orc/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">使用sqoop生成ORC格式的文件，并给Hive加载</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/hbase/">hbase</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hive/">hive</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sqoop/">sqoop</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zookeeper/">zookeeper</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/hbase/" style="font-size: 20px;">hbase</a> <a href="/tags/hive/" style="font-size: 10px;">hive</a> <a href="/tags/sqoop/" style="font-size: 10px;">sqoop</a> <a href="/tags/zookeeper/" style="font-size: 10px;">zookeeper</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a><span class="archive-list-count">2</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2015/11/10/zookeeper_stuck_dns_network/">使用Zookeeper过程中遇到客户端stuck的问题和解决建议</a>
+          </li>
+        
+          <li>
+            <a href="/2015/09/11/sqoop_orc/">使用sqoop生成ORC格式的文件，并给Hive加载</a>
+          </li>
+        
+          <li>
+            <a href="/2015/09/08/hbase_balance_problem/">HBase Coprocessor问题引起异常Balance</a>
+          </li>
+        
+          <li>
+            <a href="/2015/08/27/hbase-bulkload/">hbase bulkload 相关整理</a>
+          </li>
+        
+          <li>
+            <a href="/2015/08/27/hello-world/">Hello World , Hello PPG , Hello Sunshine</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2015 3h_william<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+
+
+<script src="/js/script.js" type="text/javascript"></script>
+
+  </div>
+</body>
+</html>

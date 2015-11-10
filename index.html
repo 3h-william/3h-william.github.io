@@ -65,10 +65,10 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-hive_sqoop_orc" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-zookeeper_stuck_dns_network" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2015/09/11/hive_sqoop_orc/" class="article-date">
-  <time datetime="2015-09-11T06:59:11.000Z" itemprop="datePublished">2015-09-11</time>
+    <a href="/2015/11/10/zookeeper_stuck_dns_network/" class="article-date">
+  <time datetime="2015-11-10T01:18:11.000Z" itemprop="datePublished">2015-11-10</time>
 </a>
     
   </div>
@@ -79,7 +79,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2015/09/11/hive_sqoop_orc/">使用sqoop生成ORC格式的文件，并给Hive加载</a>
+      <a class="article-title" href="/2015/11/10/zookeeper_stuck_dns_network/">使用Zookeeper过程中遇到客户端stuck的问题和解决建议</a>
     </h1>
   
 
@@ -87,25 +87,74 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="背景">背景</h1><p>在当前版本: sqoop-1.4.5(CDH540)中的sqoop并不支持导出格式为orcfile的格式。因此，如果我们想将数据从DB=&gt;HDFS，并生成ORC格式，只有两个办法。  </p>
+        <h1 id="背景">背景</h1><p>最近在查询一个和zookeeper相关的case。追查结果是一个称之为”Reverse DNS lookup”的问题。<br>可以称之为:反向DNS查找。 <a href="https://en.wikipedia.org/wiki/Reverse_DNS_lookup" target="_blank" rel="external">https://en.wikipedia.org/wiki/Reverse_DNS_lookup</a></p>
+<h1 id="隐患">隐患</h1><p>zookeeper 3.5以下的版本，会在客户端并发链接的时候，有一定几率发生stuck，随着并发连接的增多，发生概率越大。尤其是第一次创建连接的时候。<br>(因为zookeeper的client版本和server的版本兼容性，可以先升级客户端，客户端版本&gt;服务端版本，是支持的)</p>
+<p>原因:<br>-&gt; 1)   归根结底，是因为DNS解析的问题。 可参考:<br><a href="https://issues.apache.org/jira/browse/ZOOKEEPER-1666" target="_blank" rel="external">issue 1891</a>   </p>
+<p>-&gt; 2)   1366 issue在3.4.6已经fix，但是和它相关的另一个issue，只有在3.5才fix<br><a href="https://issues.apache.org/jira/browse/ZOOKEEPER-1891" target="_blank" rel="external">issue 1891</a>  </p>
+<h1 id="案例与解释">案例与解释</h1><p>简单的来说，问题出在 “通过IP找HostName”，上， 例如: 通过”10.x.x.x”找到”hadoopXXX” 这个方法上。<br>在计算机网络中，我们可以用ip也可以用HostName来表明一台唯一的机器，我们也知道有一个叫做DNS的服务来帮助我们将IP转化为hostName. <strong>但是，这一个转换是有开销的</strong>。<br>是需要通过上层的DNS服务器或者IP机器本身的网卡来达到映射。<br>至于细节，可以参考wiki  </p>
+<p>接下来，我们可以本地来模拟这个过程:<br>我们用Java可以启动以下代码，其中，注释的两行是两种构建方式。  </p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">        for<span class="list">(<span class="keyword">int</span> i=0<span class="comment">;i&lt;100;i++)&#123;</span></span><br><span class="line">            new Thread<span class="list">(<span class="keyword">new</span> Runnable<span class="list">()</span> &#123;</span><br><span class="line">                @Override</span><br><span class="line">                public void run<span class="list">()</span> &#123;</span><br><span class="line">//   <span class="number">1</span>                 InetSocketAddress ia = new InetSocketAddress<span class="list">( <span class="string">"10.x.x.x"</span>,<span class="number">2181</span>)</span><span class="comment">;;</span></span><br><span class="line">//   <span class="number">2</span>                 InetSocketAddress ia = new InetSocketAddress<span class="list">( <span class="string">"hadoopXXX/10.x.x.x"</span>,<span class="number">2181</span>)</span><span class="comment">;</span></span><br><span class="line">                    System.out.println<span class="list">(<span class="keyword">ia</span>.getHostName<span class="list">()</span>)</span><span class="comment">;</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;)</span>.start<span class="list">()</span><span class="comment">;</span></span><br><span class="line">        &#125;</span></span><br></pre></td></tr></table></figure>
 <ul>
-<li>a)  使用HCatalog服务，目前没有测试过，看文档是可以生成ORC的格式。  </li>
-<li>b)  原始办法，通过Hive的insert命令将一张原本不是ORC格式的数据，导入到另一个ORC格式中，这样就有了ORC格式的文件。  但该方法会造成时间、资源消耗翻倍。  </li>
+<li>当使用注释第一行的时候，线程是有很大的几率发生stuck.  </li>
+<li>当使用注释第二行的时候，是不会有这个问题。<br>而不凑巧对的是，zookeeper3.5以下的版本中，是存在第一行注释的代码的。因此，问题就产生了。  </li>
 </ul>
-<h1 id="DIY">DIY</h1><p>既然如此，自己动手，丰衣足食。介于近年来对于sqoop的使用经验，很方便的定位到了几个地方，并加入了一些类和方法，最终达到了目的。当然，因为我们的需求目前仅仅是从DB = &gt; HDFS，即只是增加了import方法中的参数，并没有在export =&gt; DB中增加。   </p>
-<p>具体代码可以参考 <a href="https://github.com/3h-william/sqoop-orc-import" target="_blank" rel="external">link</a><br>使用ant编译后，替换原来的sqoop jar即可。</p>
-<h1 id="关键点">关键点</h1><ul>
-<li>1) 使用hive的提供的TypeInfoUtils 构建ORC file的Schema.并传递到每一个Map中</li>
-<li>2) 使用 org.apache.hadoop.hive.ql.io.orc.OrcNewOutputFormat 作为输出格式  </li>
-</ul>
+<hr>
+<p>作者：3h-william<br>联系: <a href="https://github.com/3h-william" target="_blank" rel="external">https://github.com/3h-william</a><br>出处：<a href="http://3h-william.github.io" target="_blank" rel="external">http://3h-william.github.io</a>  </p>
+<hr>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/09/11/hive_sqoop_orc/" data-id="ciefantuo000334gtdv80onic" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/11/10/zookeeper_stuck_dns_network/" data-id="cigspks7g0003uogt9rvgah5c" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hive/">hive</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/zookeeper/">zookeeper</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-sqoop_orc" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/09/11/sqoop_orc/" class="article-date">
+  <time datetime="2015-09-11T07:00:11.000Z" itemprop="datePublished">2015-09-11</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/09/11/sqoop_orc/">使用sqoop生成ORC格式的文件，并给Hive加载</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="背景">背景</h1><p>在当前版本: sqoop-1.4.5(CDH540)中的sqoop并不支持导出格式为orcfile的格式。因此，如果我们想将数据从DB=&gt;HDFS，并生成ORC格式，只有两个办法。</p>
+<p>-&gt; a) 使用HCatalog服务，目前没有测试过，看文档是可以生成ORC的格式。<br>-&gt; b) 原始办法，通过Hive的insert命令将一张原本不是ORC格式的数据，导入到另一个ORC格式中，这样就有了ORC格式的文件。 但该方法会造成时间、资源消耗翻倍。</p>
+<h1 id="DIY">DIY</h1><p>既然如此，自己动手，丰衣足食。介于近年来对于sqoop的使用经验，很方便的定位到了几个地方，并加入了一些类和方法，最终达到了目的。当然，因为我们的需求目前仅仅是从DB = &gt; HDFS，即只是增加了import方法中的参数，并没有在export =&gt; DB中增加。</p>
+<p>具体代码可以参考我已经提供的版本 <a href="https://github.com/3h-william/sqoop-orc-import" target="_blank" rel="external">link</a><br>使用ant编译后，替换原来的sqoop jar即可。</p>
+<h1 id="关键点">关键点</h1><p>-&gt; 1) 使用hive的提供的TypeInfoUtils 构建ORC file的Schema.并传递到每一个Map中<br>-&gt; 2) 使用 org.apache.hadoop.hive.ql.io.orc.OrcNewOutputFormat 作为输出格式</p>
+<hr>
+<p>作者：3h-william<br>联系: <a href="https://github.com/3h-william" target="_blank" rel="external">https://github.com/3h-william</a><br>出处：<a href="http://3h-william.github.io" target="_blank" rel="external">http://3h-william.github.io</a>  </p>
+<hr>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/09/11/sqoop_orc/" data-id="cigspks7j0006uogt2dlerto9" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hive/">hive</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sqoop/">sqoop</a></li></ul>
 
     </footer>
   </div>
@@ -177,11 +226,14 @@
 <li>d) 但是，某些机器注定无法收容某些Region，所以，注定永远无法调整到一个平衡的balance掉。</li>
 </ul>
 <p>遗留问题:<br>从日志中有一个问题: server24这台机器在9/3 15:29已经dead，为何balance策略仍然会选择这台机器。是不是又bug…</p>
+<hr>
+<p>作者：3h-william<br>联系: <a href="https://github.com/3h-william" target="_blank" rel="external">https://github.com/3h-william</a><br>出处：<a href="http://3h-william.github.io" target="_blank" rel="external">http://3h-william.github.io</a>  </p>
+<hr>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/09/08/hbase_balance_problem/" data-id="ciefantuy000734gtlruiwz86" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/09/08/hbase_balance_problem/" data-id="cigspks7n000cuogtf6o9wlps" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hbase/">hbase</a></li></ul>
@@ -246,11 +298,13 @@ c)  加载。
 </code></pre><p>对此，官方设计中有一段说明:<br>If the region boundaries have changed during the course of bulk load preparation, or between the preparation and completion steps, the completebulkloads utility will automatically split the data files into pieces corresponding to the new boundaries. This process is not optimally efficient, so users should take care to minimize the delay between preparing a bulk load and importing it into the cluster, especially if other clients are simultaneously loading data through other means.</p>
 <p>大致意思是，即使客户端工具能够完成split的工作，但并不是最有效的方式，用户应该注意边界问题。</p>
 <hr>
-<h2 id="Author:_3h_william">Author: 3h_william</h2><h2 id="Link:_http://3h-william-github-io/">Link: <a href="http://3h-william.github.io/" target="_blank" rel="external">http://3h-william.github.io/</a></h2>
+<p>作者：3h-william<br>联系: <a href="https://github.com/3h-william" target="_blank" rel="external">https://github.com/3h-william</a><br>出处：<a href="http://3h-william.github.io" target="_blank" rel="external">http://3h-william.github.io</a>  </p>
+<hr>
+
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/08/27/hbase-bulkload/" data-id="ciefantu8000034gtd2iq5hur" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/08/27/hbase-bulkload/" data-id="cigspks6z0000uogtt9katlwb" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hbase/">hbase</a></li></ul>
@@ -289,7 +343,7 @@ c)  加载。
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/08/27/hello-world/" data-id="ciefantus000634gt9303mljm" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/08/27/hello-world/" data-id="cigspks7l000buogt133kcsgz" class="article-share-link">Share</a>
       
       
     </footer>
@@ -310,7 +364,7 @@ c)  加载。
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/hbase/">hbase</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hive/">hive</a><span class="tag-list-count">1</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/hbase/">hbase</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hive/">hive</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sqoop/">sqoop</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zookeeper/">zookeeper</a><span class="tag-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -319,7 +373,7 @@ c)  加载。
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/hbase/" style="font-size: 20px;">hbase</a> <a href="/tags/hive/" style="font-size: 10px;">hive</a>
+      <a href="/tags/hbase/" style="font-size: 20px;">hbase</a> <a href="/tags/hive/" style="font-size: 10px;">hive</a> <a href="/tags/sqoop/" style="font-size: 10px;">sqoop</a> <a href="/tags/zookeeper/" style="font-size: 10px;">zookeeper</a>
     </div>
   </div>
 
@@ -328,7 +382,7 @@ c)  加载。
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a><span class="archive-list-count">2</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a><span class="archive-list-count">2</span></li></ul>
     </div>
   </div>
 
@@ -340,7 +394,11 @@ c)  加载。
       <ul>
         
           <li>
-            <a href="/2015/09/11/hive_sqoop_orc/">使用sqoop生成ORC格式的文件，并给Hive加载</a>
+            <a href="/2015/11/10/zookeeper_stuck_dns_network/">使用Zookeeper过程中遇到客户端stuck的问题和解决建议</a>
+          </li>
+        
+          <li>
+            <a href="/2015/09/11/sqoop_orc/">使用sqoop生成ORC格式的文件，并给Hive加载</a>
           </li>
         
           <li>

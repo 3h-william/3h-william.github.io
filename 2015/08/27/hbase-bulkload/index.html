@@ -15,7 +15,7 @@
 <meta property="og:description" content="由于近期Team内有同学用到bulkload,整理了一下过往我用到的bulkload的相关使用经验基于hbase 0.90和0.94版本做一些简单的分析，可供参考。  
 1. 概述官方说明[0.94官方说明] (http://hbase.apache.org/0.94/book/arch.bulk.load.html)  
 简单的说，bluk load 是能够批量加载hfile =&amp;gt; hba">
-<meta property="og:updated_time" content="2015-08-27T06:57:28.768Z">
+<meta property="og:updated_time" content="2015-11-10T01:35:42.328Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="hbase bulkload 相关整理">
 <meta name="twitter:description" content="由于近期Team内有同学用到bulkload,整理了一下过往我用到的bulkload的相关使用经验基于hbase 0.90和0.94版本做一些简单的分析，可供参考。  
@@ -123,11 +123,13 @@ c)  加载。
 </code></pre><p>对此，官方设计中有一段说明:<br>If the region boundaries have changed during the course of bulk load preparation, or between the preparation and completion steps, the completebulkloads utility will automatically split the data files into pieces corresponding to the new boundaries. This process is not optimally efficient, so users should take care to minimize the delay between preparing a bulk load and importing it into the cluster, especially if other clients are simultaneously loading data through other means.</p>
 <p>大致意思是，即使客户端工具能够完成split的工作，但并不是最有效的方式，用户应该注意边界问题。</p>
 <hr>
-<h2 id="Author:_3h_william">Author: 3h_william</h2><h2 id="Link:_http://3h-william-github-io/">Link: <a href="http://3h-william.github.io/" target="_blank" rel="external">http://3h-william.github.io/</a></h2>
+<p>作者：3h-william<br>联系: <a href="https://github.com/3h-william" target="_blank" rel="external">https://github.com/3h-william</a><br>出处：<a href="http://3h-william.github.io" target="_blank" rel="external">http://3h-william.github.io</a>  </p>
+<hr>
+
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/08/27/hbase-bulkload/" data-id="ciefantu8000034gtd2iq5hur" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/08/27/hbase-bulkload/" data-id="cigspks6z0000uogtt9katlwb" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hbase/">hbase</a></li></ul>
@@ -168,7 +170,7 @@ c)  加载。
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/hbase/">hbase</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hive/">hive</a><span class="tag-list-count">1</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/hbase/">hbase</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hive/">hive</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sqoop/">sqoop</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zookeeper/">zookeeper</a><span class="tag-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -177,7 +179,7 @@ c)  加载。
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/hbase/" style="font-size: 20px;">hbase</a> <a href="/tags/hive/" style="font-size: 10px;">hive</a>
+      <a href="/tags/hbase/" style="font-size: 20px;">hbase</a> <a href="/tags/hive/" style="font-size: 10px;">hive</a> <a href="/tags/sqoop/" style="font-size: 10px;">sqoop</a> <a href="/tags/zookeeper/" style="font-size: 10px;">zookeeper</a>
     </div>
   </div>
 
@@ -186,7 +188,7 @@ c)  加载。
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a><span class="archive-list-count">2</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a><span class="archive-list-count">2</span></li></ul>
     </div>
   </div>
 
@@ -198,7 +200,11 @@ c)  加载。
       <ul>
         
           <li>
-            <a href="/2015/09/11/hive_sqoop_orc/">使用sqoop生成ORC格式的文件，并给Hive加载</a>
+            <a href="/2015/11/10/zookeeper_stuck_dns_network/">使用Zookeeper过程中遇到客户端stuck的问题和解决建议</a>
+          </li>
+        
+          <li>
+            <a href="/2015/09/11/sqoop_orc/">使用sqoop生成ORC格式的文件，并给Hive加载</a>
           </li>
         
           <li>
