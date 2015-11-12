@@ -105,10 +105,149 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/11/10/zookeeper_stuck_dns_network/" data-id="cigsprj1j0003l8gt7ka4v6b6" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/11/10/zookeeper_stuck_dns_network/" data-id="cigvmafhj00031sgtsb6w6bsu" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/zookeeper/">zookeeper</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-als_report" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/10/05/als_report/" class="article-date">
+  <time datetime="2015-10-05T06:08:11.000Z" itemprop="datePublished">2015-10-05</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/10/05/als_report/">推荐算法与协同过滤</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="(注:_只是个人半年前的一些研究总结，在此仅此记录。)">(注: 只是个人半年前的一些研究总结，在此仅此记录。)</h1><h1 id="1_背景资料：">1    背景资料：</h1><p>推荐系统基于两种策略：  </p>
+<blockquote>
+<ul>
+<li>a)    基于内容的过滤(Content-based filtering)   </li>
+<li>b)    协同过滤 (Collaborative filtering) (CF)<br>模型：  </li>
+<li>a)    内容过滤需要根据内容创建模板，诸如用物品的title，名字。等等。<br>当然也可以根据用户建立模板。用户的画像等等。  </li>
+<li>b)    基于协同过滤。会从历史记录中，找出item-User之间的关系，并建立相关模型。<br>差异：<br>从某些场景来看，内容过滤更为优秀，比如一个新用户(没有任何的历史)。或是一个新商品，没有任何的关联数据。这个时候基于Content-Based的过滤，显得更恰当。<br>然而，在大多数的场景下，协同过滤会变得更为优秀。原因在于，他更充分的考虑到User-Item之间的关系。当然，该方法也使用的更为广泛。</li>
+</ul>
+</blockquote>
+<h1 id="2_协同过滤的集中分类">2 协同过滤的集中分类</h1><h2 id="2-1_基于物品的协同过滤">2.1 基于物品的协同过滤</h2><p>构建  Item -&gt; User的向量: V(I-&gt;U)<br>      计算 各个Verctor之间的相似度<br>直观理解: 把和你之前喜欢的物品近似的物品推荐给你  </p>
+<p><img src="/img/als_report/p1.jpg" alt=""></p>
+<h2 id="2-2_基于用户的的协同过滤">2.2 基于用户的的协同过滤</h2><p>构建  User -&gt; Item的向量: V(U-&gt;I)<br>      计算 各个Verctor之间的相似度<br>直观理解：把就是把与你有相同爱好的用户所喜欢的物品,推荐给你<br><img src="/img/als_report/p2.jpg" alt="">  </p>
+<h2 id="2-3_比Item-CF和User-CF">2.3 比Item-CF和User-CF</h2><p>ItemCF: 多样性不足 (覆盖率)<br>UserItem: 长尾性不足。<br>综合：兴趣点不同。</p>
+<h2 id="2-4_于评分的协同过滤_(Slope_One)">2.4 于评分的协同过滤 (Slope One)</h2><p><img src="/img/als_report/p3.jpg" alt="">  </p>
+<h1 id="3_SVD与协同过滤">3  SVD与协同过滤</h1><h2 id="3-1_传统的SVD">3.1  传统的SVD</h2><p>SVD (singular value decomposition) 奇异值分解。<br><img src="/img/als_report/p4.jpg" alt=""><br><img src="/img/als_report/a.jpg" alt=""></p>
+<p>低阶近似：</p>
+<ol>
+<li>给定一个矩阵C，对其奇异值分解：  <img src="/img/als_report/a.jpg" alt=""></li>
+<li>构造<img src="/img/als_report/a2.jpg" alt="">，它是将<img src="/img/als_report/a3.jpg" alt="">的第k+1行至M行设为零，也就是把<img src="/img/als_report/a3.jpg" alt="">的最小的r-k个(the r-k smallest)奇异值设为零。  </li>
+<li>计算 <img src="/img/als_report/a4.jpg" alt=""><br>特征值数值的大小对矩阵-向量相乘影响的大小成正比，而奇异值和特征值也是正比关系，因此这里选取数值最小的r-k个特征值设为零合乎情理，即我们所希望的C-Ck尽可能的小</li>
+</ol>
+<h2 id="3-2_传统的SVD能否应用于协同过滤（基于评分）的模型?">3.2  传统的SVD能否应用于协同过滤（基于评分）的模型?</h2><p>首先有几个问题 : </p>
+<blockquote>
+<ul>
+<li>1．    传统的SVD对于高维稀疏矩阵实惠丢失一些特征信息。</li>
+<li>2．    当矩阵不完全时，SVD是无法定义的。 （完全我的理解是有些值是没有定义 ，缺省，用latent factor 可以解）</li>
+<li>3．    如果只对已知的信息求解，会非常容易过度拟合。 (我的理解:没有加入Lambda*规则化)<br>另外，要计算SVD的特征值，对于高维数据来说，也是代价巨大的。  </li>
+</ul>
+</blockquote>
+<h2 id="3-3_SVD因式分解，实现协同过滤">3.3  SVD因式分解，实现协同过滤</h2><p><img src="/img/als_report/p5.jpg" alt=""> </p>
+<p><img src="/img/als_report/p6.jpg" alt=""> </p>
+<blockquote>
+<ul>
+<li><h3 id="公式1_:_因式分解(plain)">公式1 :  因式分解(plain)</h3></li>
+</ul>
+</blockquote>
+<p><img src="/img/als_report/f1.jpg" alt=""><br>设定有那么一个转换，能够将已知的评分Matrix分解成两个Factor矩阵相乘。一个和Item相关，一个和User相关</p>
+<blockquote>
+<ul>
+<li><h3 id="公式2:_规则化*Lambda_(L2)">公式2:  规则化*Lambda (L2)</h3><p>规则化的目的，是防止过度拟合。<br>其中Lambda太大，容易低拟合。Lambda太小，容易过拟合。<br>（这里的Lambda在Spark中需要根据实际的数据样本分布，维度的大小调整）<br>当然，这里用的是L2拟合。（区别于L1）,L2是二次函数拟合。<br>(L2拟合的目的是使得W的元素很小，接近于0，但不等于0，会使得模型简单。这样使得个别值对全局的印象降低，越简单的模型越不容易产生过拟合)<br><img src="/img/als_report/f2.jpg" alt="">  </p>
+</li>
+<li><h3 id="公式3_基线公式(偏好)">公式3  基线公式(偏好)</h3><p><img src="/img/als_report/f3.jpg" alt=""><br>其中：<br>U是所有投票的均值<br>bu是用户打分相对于均值的偏差。<br>bi 是该item被打分相对于均值的偏差<br>(该公式是ALS算法的最原始形态)  </p>
+</li>
+<li><h3 id="公式4_单个打分">公式4   单个打分</h3><p><img src="/img/als_report/f4.jpg" alt=""><br>该公式是由 (公式1 )  + (公式3) 推得<br>单条记录的打分  </p>
+</li>
+<li><h3 id="公式5_整体打分求最小化">公式5   整体打分求最小化</h3></li>
+</ul>
+</blockquote>
+<p><img src="/img/als_report/f5.jpg" alt=""><br>由以上同时推得。</p>
+<blockquote>
+<ul>
+<li><h3 id="公式6_外部数据">公式6   外部数据</h3>为了避免冷启动问题，需要加入外部数据。否则会导致新用户的数据非常少。<br>那么外部数据时什么？ 是基于该用户的一些其他特征（画像）<br><img src="/img/als_report/f6.jpg" alt=""> </li>
+</ul>
+<ul>
+<li><h3 id="公式7_动态时间">公式7   动态时间</h3><p><img src="/img/als_report/f7.jpg" alt=""><br>将时间作为权重考虑进去。<br>目的是：用户的倾向会随着时间而发生变化，使得更好的捕捉最新的趋势。  </p>
+</li>
+<li><h3 id="公式8_自信度（Implicit_,_latent_factor）">公式8  自信度（Implicit , latent factor）</h3><p><img src="/img/als_report/f8.jpg" alt=""><br>该公式和之后Spark中使用trainImplict的理论基本一致。<br>输入矩阵是不同的Confidence Levels</p>
+</li>
+<li><h3 id="几种优化结果：">几种优化结果：</h3><p><img src="/img/als_report/p7.jpg" alt="">  </p>
+</li>
+</ul>
+</blockquote>
+<h1 id="4_Implict_Feedback">4 Implict Feedback</h1><p>显然，如果用户对于物品已经有的评分，这些数据称之为explicit。<br>但是，有些数据，诸如物品的点击数等，这些并不能直接反应用户对该物品的评分。只是表明了一种倾向，但是，究竟是正向的倾向，还是负向的倾向，是不确定的。  </p>
+<p>Implicit feedback 的数据和 explicit data的数据是非常不同的:    </p>
+<blockquote>
+<ul>
+<li>a)     矩阵是完整定义了的。 （explicit的数据会有Miss）</li>
+<li>b)     没有负向的反馈。 (没有明显的倾向)</li>
+<li>c)     在0值的时候，是没有交互定义的。</li>
+<li>d)     对于这部分数据，必然没有十足的把握（相对于显示的评分，信心不足）</li>
+<li>e)     当然，用标准的SVD显然是无法求得这种关系的。</li>
+</ul>
+</blockquote>
+<p>以下几张图可以一目了然其计算法则：<br><img src="/img/als_report/p8.jpg" alt="">  </p>
+<p><img src="/img/als_report/p9.jpg" alt="">  </p>
+<p><img src="/img/als_report/p10.jpg" alt="">  </p>
+<p>但，Collaborative Filtering for Implicit Feedback Dataset  这篇论文暂时没有搜索到原文。<br>只能通过代码来分析其计算公式。 </p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">val confidence = <span class="number">1</span> + alpha * abs<span class="list">(<span class="keyword">rs</span><span class="list">(<span class="keyword">i</span>)</span>)</span></span><br></pre></td></tr></table></figure>
+<p>所以，在Spark中，参数为alpha的值，是用来调节自信率的。</p>
+<h1 id="5_ALS和SGD">5 ALS和SGD</h1><p>即便我们已经有了上述的许多公式，我们如何求解？</p>
+<h2 id="5-1_随机梯度下降(SGD)">5.1   随机梯度下降(SGD)</h2><p>Stochastic Gradient Descent  </p>
+<p>在数学上，我们知道。 一个符合convex的函数是可以求得最小值的。<br>这样一来，我们就有了梯度下降的求解方法，其梯度下降的速度，取决于convex函数的凸性强不强。  </p>
+<p><img src="/img/als_report/p11.jpg" alt=""><br>这就是梯度下降的迭代公式，当然，该算法已经应用于Mahout中实现。  </p>
+<h2 id="5-2_ALS算法">5.2  ALS算法</h2><p>Alternating Least Squares (交替最小方差算法)<br>该算法有两个优点:  </p>
+<blockquote>
+<ul>
+<li>1)    ALS更容易并行化。  </li>
+<li>2)    ALS对处理隐式数据更方便。   </li>
+</ul>
+</blockquote>
+<p>根据5.1的公式中：<br><img src="/img/als_report/p12.jpg" alt=""></p>
+<p>这两共公式各自有两个变量，我们可以固定其中一个变量，这样使得其编程一个二次函数，能够被最优化求解。<br>而ALS就是不断的交替固定Pu和Qi，然后求解另一个变量的最优值。<br>当然，通常来说,SGD会比ALS更加简单和快速，但是ALS的并行性比较好。如果矩阵是稀疏矩阵，那么ALS更有优势  </p>
+<h1 id="6_算法的检验">6 算法的检验</h1><p>RMSE/MSE/MAPK<br>待续….</p>
+<h1 id="7_Reference">7 Reference</h1><p>spark,als-ws 基础<br><a href="http://www2.research.att.com/~volinsky/papers/ieeecomputer.pdf" target="_blank" rel="external">http://www2.research.att.com/~volinsky/papers/ieeecomputer.pdf</a></p>
+<p>协同过滤部分:<br><a href="http://www.ibm.com/developerworks/cn/web/1103_zhaoct_recommstudy2/index.html" target="_blank" rel="external">http://www.ibm.com/developerworks/cn/web/1103_zhaoct_recommstudy2/index.html</a><br><a href="http://www.52ml.net/297.html" target="_blank" rel="external">http://www.52ml.net/297.html</a></p>
+<p>svd 部分：<br><a href="http://blog.csdn.net/wangran51/article/details/7408414" target="_blank" rel="external">http://blog.csdn.net/wangran51/article/details/7408414</a><br><a href="http://blog.csdn.net/qianhen123/article/details/40077873" target="_blank" rel="external">http://blog.csdn.net/qianhen123/article/details/40077873</a></p>
+<p>规则化:<br><a href="http://blog.csdn.net/u012162613/article/details/44261657" target="_blank" rel="external">http://blog.csdn.net/u012162613/article/details/44261657</a></p>
+<p>Latent-factor-models<br><a href="http://www.slideshare.net/sscdotopen/latent-factor-models-for-collaborative-filtering" target="_blank" rel="external">http://www.slideshare.net/sscdotopen/latent-factor-models-for-collaborative-filtering</a></p>
+<hr>
+<p>作者：3h-william<br>联系: <a href="https://github.com/3h-william" target="_blank" rel="external">https://github.com/3h-william</a><br>出处：<a href="http://3h-william.github.io" target="_blank" rel="external">http://3h-william.github.io</a>  </p>
+<hr>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/10/05/als_report/" data-id="cigvmafgz00001sgtsnwikkhq" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MachineLearning/">MachineLearning</a></li></ul>
 
     </footer>
   </div>
@@ -151,7 +290,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/09/11/sqoop_orc/" data-id="cigsprj1m0006l8gtcywr38wi" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/09/11/sqoop_orc/" data-id="cigvmafhm00061sgtgmlt8acw" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hive/">hive</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sqoop/">sqoop</a></li></ul>
@@ -233,11 +372,48 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/09/08/hbase_balance_problem/" data-id="cigsprj1q000cl8gtmv4xsqzw" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/09/08/hbase_balance_problem/" data-id="cigvmafhr000c1sgt4cg2uwd8" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hbase/">hbase</a></li></ul>
 
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/08/27/hello-world/" class="article-date">
+  <time datetime="2015-08-27T06:08:11.000Z" itemprop="datePublished">2015-08-27</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/08/27/hello-world/">Hello World , Hello PPG , Hello Sunshine</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>You are always my sunshine…</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/08/27/hello-world/" data-id="cigvmafhp000b1sgtc1fraowp" class="article-share-link">Share</a>
+      
+      
     </footer>
   </div>
   
@@ -304,48 +480,11 @@ c)  加载。
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/08/27/hbase-bulkload/" data-id="cigsprj0v0000l8gt3j4na3ki" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/08/27/hbase-bulkload/" data-id="cigvmafht000f1sgt4culcw8j" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hbase/">hbase</a></li></ul>
 
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/08/27/hello-world/" class="article-date">
-  <time datetime="2015-08-27T06:08:11.000Z" itemprop="datePublished">2015-08-27</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/08/27/hello-world/">Hello World , Hello PPG , Hello Sunshine</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>You are always my sunshine…</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/08/27/hello-world/" data-id="cigsprj1o000bl8gtopbv4gob" class="article-share-link">Share</a>
-      
-      
     </footer>
   </div>
   
@@ -364,7 +503,7 @@ c)  加载。
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/hbase/">hbase</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hive/">hive</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sqoop/">sqoop</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zookeeper/">zookeeper</a><span class="tag-list-count">1</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/MachineLearning/">MachineLearning</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hbase/">hbase</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hive/">hive</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sqoop/">sqoop</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zookeeper/">zookeeper</a><span class="tag-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -373,7 +512,7 @@ c)  加载。
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/hbase/" style="font-size: 20px;">hbase</a> <a href="/tags/hive/" style="font-size: 10px;">hive</a> <a href="/tags/sqoop/" style="font-size: 10px;">sqoop</a> <a href="/tags/zookeeper/" style="font-size: 10px;">zookeeper</a>
+      <a href="/tags/MachineLearning/" style="font-size: 10px;">MachineLearning</a> <a href="/tags/hbase/" style="font-size: 20px;">hbase</a> <a href="/tags/hive/" style="font-size: 10px;">hive</a> <a href="/tags/sqoop/" style="font-size: 10px;">sqoop</a> <a href="/tags/zookeeper/" style="font-size: 10px;">zookeeper</a>
     </div>
   </div>
 
@@ -382,7 +521,7 @@ c)  加载。
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a><span class="archive-list-count">2</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a><span class="archive-list-count">2</span></li></ul>
     </div>
   </div>
 
@@ -398,15 +537,15 @@ c)  加载。
           </li>
         
           <li>
+            <a href="/2015/10/05/als_report/">推荐算法与协同过滤</a>
+          </li>
+        
+          <li>
             <a href="/2015/09/11/sqoop_orc/">使用sqoop生成ORC格式的文件，并给Hive加载</a>
           </li>
         
           <li>
             <a href="/2015/09/08/hbase_balance_problem/">HBase Coprocessor问题引起异常Balance</a>
-          </li>
-        
-          <li>
-            <a href="/2015/08/27/hbase-bulkload/">hbase bulkload 相关整理</a>
           </li>
         
           <li>
