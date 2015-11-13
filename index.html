@@ -89,8 +89,8 @@
       
         <h1 id="背景">背景</h1><p>最近在查询一个和zookeeper相关的case。追查结果是一个称之为”Reverse DNS lookup”的问题。<br>可以称之为:反向DNS查找。 <a href="https://en.wikipedia.org/wiki/Reverse_DNS_lookup" target="_blank" rel="external">https://en.wikipedia.org/wiki/Reverse_DNS_lookup</a></p>
 <h1 id="隐患">隐患</h1><p>zookeeper 3.5以下的版本，会在客户端并发链接的时候，有一定几率发生stuck，随着并发连接的增多，发生概率越大。尤其是第一次创建连接的时候。<br>(因为zookeeper的client版本和server的版本兼容性，可以先升级客户端，客户端版本&gt;服务端版本，是支持的)</p>
-<p>原因:<br>-&gt; 1)   归根结底，是因为DNS解析的问题。 可参考:<br><a href="https://issues.apache.org/jira/browse/ZOOKEEPER-1666" target="_blank" rel="external">issue 1666</a>   </p>
-<p>-&gt; 2)   1666 issue在3.4.6已经fix，但是和它相关的另一个issue，只有在3.5才fix<br><a href="https://issues.apache.org/jira/browse/ZOOKEEPER-1891" target="_blank" rel="external">issue 1891</a>  </p>
+<p>原因:<br>1)   归根结底，是因为DNS解析的问题。 可参考:<br><a href="https://issues.apache.org/jira/browse/ZOOKEEPER-1666" target="_blank" rel="external">issue 1666</a>   </p>
+<p>2)   1666 issue在3.4.6已经fix，但是和它相关的另一个issue，只有在3.5才fix<br><a href="https://issues.apache.org/jira/browse/ZOOKEEPER-1891" target="_blank" rel="external">issue 1891</a>  </p>
 <h1 id="案例与解释">案例与解释</h1><p>简单的来说，问题出在 “通过IP找HostName”，上， 例如: 通过”10.x.x.x”找到”hadoopXXX” 这个方法上。<br>在计算机网络中，我们可以用ip也可以用HostName来表明一台唯一的机器，我们也知道有一个叫做DNS的服务来帮助我们将IP转化为hostName. <strong>但是，这一个转换是有开销的</strong>。<br>是需要通过上层的DNS服务器或者IP机器本身的网卡来达到映射。<br>至于细节，可以参考wiki  </p>
 <p>接下来，我们可以本地来模拟这个过程:<br>我们用Java可以启动以下代码，其中，注释的两行是两种构建方式。  </p>
 <figure class="highlight lisp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">        for<span class="list">(<span class="keyword">int</span> i=0<span class="comment">;i&lt;100;i++)&#123;</span></span><br><span class="line">            new Thread<span class="list">(<span class="keyword">new</span> Runnable<span class="list">()</span> &#123;</span><br><span class="line">                @Override</span><br><span class="line">                public void run<span class="list">()</span> &#123;</span><br><span class="line">//   <span class="number">1</span>                 InetSocketAddress ia = new InetSocketAddress<span class="list">( <span class="string">"10.x.x.x"</span>,<span class="number">2181</span>)</span><span class="comment">;;</span></span><br><span class="line">//   <span class="number">2</span>                 InetSocketAddress ia = new InetSocketAddress<span class="list">( <span class="string">"hadoopXXX/10.x.x.x"</span>,<span class="number">2181</span>)</span><span class="comment">;</span></span><br><span class="line">                    System.out.println<span class="list">(<span class="keyword">ia</span>.getHostName<span class="list">()</span>)</span><span class="comment">;</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;)</span>.start<span class="list">()</span><span class="comment">;</span></span><br><span class="line">        &#125;</span></span><br></pre></td></tr></table></figure>
@@ -105,7 +105,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/11/10/zookeeper_stuck_dns_network/" data-id="cigvzysgx0003q4gtonh1t7p3" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/11/10/zookeeper_stuck_dns_network/" data-id="cigx3wnt50003ikgt2oi0iust" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/zookeeper/">zookeeper</a></li></ul>
@@ -244,7 +244,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/10/05/als_report/" data-id="cigvzysfz0000q4gt83ggdlmj" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/10/05/als_report/" data-id="cigx3wnsl0000ikgtv3ujftsq" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MachineLearning/">MachineLearning</a></li></ul>
@@ -290,7 +290,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/09/11/sqoop_orc/" data-id="cigvzysh60006q4gte7z3nrqh" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/09/11/sqoop_orc/" data-id="cigx3wnt80006ikgtbmxaqcdy" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hive/">hive</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sqoop/">sqoop</a></li></ul>
@@ -372,48 +372,11 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/09/08/hbase_balance_problem/" data-id="cigvzyshi000hq4gt2skku2mj" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/09/08/hbase_balance_problem/" data-id="cigx3wnth000hikgtnpj5ckmq" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hbase/">hbase</a></li></ul>
 
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/08/27/hello-world/" class="article-date">
-  <time datetime="2015-08-27T06:08:11.000Z" itemprop="datePublished">2015-08-27</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/08/27/hello-world/">Hello World , Hello PPG , Hello Sunshine</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>You are always my sunshine…</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/08/27/hello-world/" data-id="cigvzysha000bq4gtrpyilm6a" class="article-share-link">Share</a>
-      
-      
     </footer>
   </div>
   
@@ -480,10 +443,69 @@ c)  加载。
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/08/27/hbase-bulkload/" data-id="cigvzyshk000jq4gt26upugbz" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/08/27/hbase-bulkload/" data-id="cigx3wntn000jikgt3epy5ha1" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hbase/">hbase</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-elasticsearch_dc" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/08/10/elasticsearch_dc/" class="article-date">
+  <time datetime="2015-08-10T01:50:22.000Z" itemprop="datePublished">2015-08-10</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/08/10/elasticsearch_dc/">为ElasticSearch 添加支持跨DC的特性</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="背景">背景</h1><p>无意间发现，去年年初提到社区的改动，在去年8月得到回复，虽然没有被采纳…<br><a href="https://github.com/elastic/elasticsearch/pull/4651#issuecomment-51578376" target="_blank" rel="external">https://github.com/elastic/elasticsearch/pull/4651#issuecomment-51578376</a><br>对方提出两点:</p>
+<ol>
+<li>不赞成ElasticSearch跨越数据中心构建。   </li>
+<li>认为同步和延迟会造成比较大的问题。    </li>
+</ol>
+<h3 id="不过，目前为止，我认为这个特性有它的价值，所以在此分享一些当初的设计思想和改造方法。同时，透露一下，这个改造在公司内部也正常稳定运行了近一年多"><strong>不过，目前为止，我认为这个特性有它的价值，所以在此分享一些当初的设计思想和改造方法。同时，透露一下，这个改造在公司内部也正常稳定运行了近一年多</strong></h3><h1 id="改进点">改进点</h1><p>Elastic Search的节点设计思想是，每一组索引分片，由一个primary做write操作，而前天的replica做读操作。<br>那么，如果对于一个跨数据中心的elastic Search设计，将会因为以下的场景，带来一些问题:</p>
+<ol>
+<li>如果所有的写操作是由一个数据中心完成（事实上，大多数情况都是如此），由一个主的数据中心处理数据，然后分发到其他的数据中心(跨location)</li>
+<li>而ES的Primary的规则，并不支持将Primary都分配在同属于一个location的Node，而是会根据其自身的集中策略来分配</li>
+<li>根据以上两点，最终的结果是: 如果由两个数据中心，Primary可能分配到任何的数据中心，造成write操作会分散在不同的location</li>
+</ol>
+<h3 id="而我们要做的是，提供一种策略，使得primary分配到同一个location下的index分片"><strong>而我们要做的是，提供一种策略，使得primary分配到同一个location下的index分片</strong></h3><h1 id="改进效果">改进效果</h1><p><img src="/img/elasticsearch_dc/1.png" alt="分布"></p>
+<h3 id="这种策略可以支持任何的情况:">这种策略可以支持任何的情况:</h3><ol>
+<li>primary所在的location全部down掉，只剩下replica的location</li>
+<li>任意顺序启动Node.</li>
+<li>任意一种HA的可能情况。  </li>
+</ol>
+<h3 id="代码部分，可参考我已经提交的版本">代码部分，可参考我已经提交的版本</h3><p><a href="https://github.com/3h-william/elasticsearch-dc-version0.0.1" target="_blank" rel="external">https://github.com/3h-william/elasticsearch-dc-version0.0.1</a></p>
+<hr>
+<p>作者：3h-william<br>联系: <a href="https://github.com/3h-william" target="_blank" rel="external">https://github.com/3h-william</a><br>出处：<a href="http://3h-william.github.io" target="_blank" rel="external">http://3h-william.github.io</a>  </p>
+<hr>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/08/10/elasticsearch_dc/" data-id="cigx3wntq000likgtfg3hlq9z" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/elasticsearch/">elasticsearch</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/search/">search</a></li></ul>
 
     </footer>
   </div>
@@ -517,20 +539,9 @@ c)  加载。
         <h1 id="背景">背景</h1><p>前一段时间，内部用到TSDB，发现经常引起HBase服务挂掉。最终，我这里经过一些排查，找到了问题。<br>并且，我们已经向社区提出了这个问题。在这里，以此记录解决过程。  </p>
 <h1 id="一-_根本原因:">一. 根本原因:</h1><p>因为TSDB的合并导致单条记录的column非常大。一旦大于MAX_CHUNK_SIZE_KEY = “hfile.index.block.max.size”(默认128K);  就由一定几率使得Memstore  Flush无限进行。<br>并且本地已经模拟出该场景。我插入了一条Column非常大的记录(150K) ，然后调用flush， RS进入死循环，HDFS文件不断增大.</p>
 <p><img src="/img/tsdb_hbase_issue/1.jpg" alt=""></p>
-<h1 id="二-_大致分析流程如下">二. 大致分析流程如下</h1><blockquote>
-<ul>
-<li>1.今天再次走代码流程和日志记录，纠正了昨天判断是HBase Compaction触发导致的问题。(出问题的那个点，并没有进行HBase层面的Compact)</li>
-<li>2.进一步确认，是因为HBase的Memstore Flush成HFile导致。 （Hfile也是存在于Region/.tmp中,在一个时间点,HBase都做了一次flush</li>
-<li>3.随后定位到，问题出在了Flush Memstore的时候，需要生产HFile V2 下的BlockData Index, 并导致写索引的死循环。  </li>
-</ul>
-</blockquote>
-<h2 id="接着，让我们来看看，代码究竟做了些什么事情:">接着，让我们来看看，代码究竟做了些什么事情:</h2><blockquote>
-<ul>
-<li>a)选取第一条KV，作为RootChunk，建立索引<br><img src="/img/tsdb_hbase_issue/2.jpg" alt=""></li>
-<li>b)写完Level Two的索引数据，但是还是要将Parent的索引写到Level One的索引中<br><img src="/img/tsdb_hbase_issue/3.jpg" alt=""></li>
-<li>c)进入a图中的死循环。 反复调用写Root KV的索引，但都因为length太大，再次写子索引，周而复始，至死不休。<h1 id="三-_社区反映">三. 社区反映</h1><a href="https://issues.apache.org/jira/browse/HBASE-12320" target="_blank" rel="external">https://issues.apache.org/jira/browse/HBASE-12320</a><br>这是去年在JIRA 上提出的 ISSUE，但一直都没有得到解决。虽然已经有人意识到了问题。<br>事实上，不论是ColumnName的大小，或是Rowkey的大小，或是Faimily的大小，一旦超过这个阀值，就会出问题。<br>同时，只是建议，HBase的单个KV的大小，不超过128K。   </li>
-</ul>
-</blockquote>
+<h1 id="二-_大致分析流程如下">二. 大致分析流程如下</h1><p>1.今天再次走代码流程和日志记录，纠正了昨天判断是HBase Compaction触发导致的问题。(出问题的那个点，并没有进行HBase层面的Compact)<br>2.进一步确认，是因为HBase的Memstore Flush成HFile导致。 （Hfile也是存在于Region/.tmp中,在一个时间点,HBase都做了一次flush<br>3.随后定位到，问题出在了Flush Memstore的时候，需要生产HFile V2 下的BlockData Index, 并导致写索引的死循环。  </p>
+<h2 id="接着，让我们来看看，代码究竟做了些什么事情:">接着，让我们来看看，代码究竟做了些什么事情:</h2><p>a)选取第一条KV，作为RootChunk，建立索引<br><img src="/img/tsdb_hbase_issue/2.jpg" alt=""><br>b)写完Level Two的索引数据，但是还是要将Parent的索引写到Level One的索引中<br><img src="/img/tsdb_hbase_issue/3.jpg" alt=""><br>c)进入a图中的死循环。 反复调用写Root KV的索引，但都因为length太大，再次写子索引，周而复始，至死不休。</p>
+<h1 id="三-_社区反映">三. 社区反映</h1><p><a href="https://issues.apache.org/jira/browse/HBASE-12320" target="_blank" rel="external">https://issues.apache.org/jira/browse/HBASE-12320</a><br>这是去年在JIRA 上提出的 ISSUE，但一直都没有得到解决。虽然已经有人意识到了问题。<br>事实上，不论是ColumnName的大小，或是Rowkey的大小，或是Faimily的大小，一旦超过这个阀值，就会出问题。<br>同时，只是建议，HBase的单个KV的大小，不超过128K。   </p>
 <h1 id="四-_解决方案">四. 解决方案</h1><p>注意TSDB的推送的数据，不要分的太小。或者，关闭compaction(TSDB层面)  </p>
 <hr>
 <p>作者：3h-william<br>联系: <a href="https://github.com/3h-william" target="_blank" rel="external">https://github.com/3h-william</a><br>出处：<a href="http://3h-william.github.io" target="_blank" rel="external">http://3h-william.github.io</a>  </p>
@@ -539,11 +550,48 @@ c)  加载。
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/06/07/hbase_tsdb_issue/" data-id="cigvzyshd000cq4gtxlk75dsn" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/06/07/hbase_tsdb_issue/" data-id="cigx3wntd000cikgtv20kfg1i" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hbase/">hbase</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tsdb/">tsdb</a></li></ul>
 
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/06/01/hello-world/" class="article-date">
+  <time datetime="2015-06-01T06:08:11.000Z" itemprop="datePublished">2015-06-01</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/06/01/hello-world/">Hello World , Hello PPG , Hello Sunshine</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>You are always my sunshine…</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/06/01/hello-world/" data-id="cigx3wntb000bikgtmzn4ftkm" class="article-share-link">Share</a>
+      
+      
     </footer>
   </div>
   
@@ -562,7 +610,7 @@ c)  加载。
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/MachineLearning/">MachineLearning</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hbase/">hbase</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hive/">hive</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sqoop/">sqoop</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tsdb/">tsdb</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zookeeper/">zookeeper</a><span class="tag-list-count">1</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/MachineLearning/">MachineLearning</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/elasticsearch/">elasticsearch</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hbase/">hbase</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hive/">hive</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/search/">search</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sqoop/">sqoop</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tsdb/">tsdb</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zookeeper/">zookeeper</a><span class="tag-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -571,7 +619,7 @@ c)  加载。
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/MachineLearning/" style="font-size: 10px;">MachineLearning</a> <a href="/tags/hbase/" style="font-size: 20px;">hbase</a> <a href="/tags/hive/" style="font-size: 10px;">hive</a> <a href="/tags/sqoop/" style="font-size: 10px;">sqoop</a> <a href="/tags/tsdb/" style="font-size: 10px;">tsdb</a> <a href="/tags/zookeeper/" style="font-size: 10px;">zookeeper</a>
+      <a href="/tags/MachineLearning/" style="font-size: 10px;">MachineLearning</a> <a href="/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/tags/hbase/" style="font-size: 20px;">hbase</a> <a href="/tags/hive/" style="font-size: 10px;">hive</a> <a href="/tags/search/" style="font-size: 10px;">search</a> <a href="/tags/sqoop/" style="font-size: 10px;">sqoop</a> <a href="/tags/tsdb/" style="font-size: 10px;">tsdb</a> <a href="/tags/zookeeper/" style="font-size: 10px;">zookeeper</a>
     </div>
   </div>
 
@@ -580,7 +628,7 @@ c)  加载。
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a><span class="archive-list-count">1</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a><span class="archive-list-count">2</span></li></ul>
     </div>
   </div>
 
@@ -608,7 +656,7 @@ c)  加载。
           </li>
         
           <li>
-            <a href="/2015/08/27/hello-world/">Hello World , Hello PPG , Hello Sunshine</a>
+            <a href="/2015/08/27/hbase-bulkload/">hbase bulkload 相关整理</a>
           </li>
         
       </ul>

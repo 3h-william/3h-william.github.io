@@ -3,21 +3,18 @@
 <head>
   <meta charset="utf-8">
   
-  <title>使用sqoop生成ORC格式的文件，并给Hive加载 | 3h_William</title>
+  <title>Hello World , Hello PPG , Hello Sunshine | 3h_William</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="背景在当前版本: sqoop-1.4.5(CDH540)中的sqoop并不支持导出格式为orcfile的格式。因此，如果我们想将数据从DB=&amp;gt;HDFS，并生成ORC格式，只有两个办法。
--&amp;gt; a) 使用HCatalog服务，目前没有测试过，看文档是可以生成ORC的格式。-&amp;gt; b) 原始办法，通过Hive的insert命令将一张原本不是ORC格式的数据，导入到另一个ORC格式中，这">
+  <meta name="description" content="You are always my sunshine…">
 <meta property="og:type" content="article">
-<meta property="og:title" content="使用sqoop生成ORC格式的文件，并给Hive加载">
-<meta property="og:url" content="http://yoursite.com/2015/09/11/sqoop_orc/index.html">
+<meta property="og:title" content="Hello World , Hello PPG , Hello Sunshine">
+<meta property="og:url" content="http://yoursite.com/2015/06/01/hello-world/index.html">
 <meta property="og:site_name" content="3h_William">
-<meta property="og:description" content="背景在当前版本: sqoop-1.4.5(CDH540)中的sqoop并不支持导出格式为orcfile的格式。因此，如果我们想将数据从DB=&amp;gt;HDFS，并生成ORC格式，只有两个办法。
--&amp;gt; a) 使用HCatalog服务，目前没有测试过，看文档是可以生成ORC的格式。-&amp;gt; b) 原始办法，通过Hive的insert命令将一张原本不是ORC格式的数据，导入到另一个ORC格式中，这">
-<meta property="og:updated_time" content="2015-11-10T01:35:47.800Z">
+<meta property="og:description" content="You are always my sunshine…">
+<meta property="og:updated_time" content="2015-11-13T03:29:28.027Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="使用sqoop生成ORC格式的文件，并给Hive加载">
-<meta name="twitter:description" content="背景在当前版本: sqoop-1.4.5(CDH540)中的sqoop并不支持导出格式为orcfile的格式。因此，如果我们想将数据从DB=&amp;gt;HDFS，并生成ORC格式，只有两个办法。
--&amp;gt; a) 使用HCatalog服务，目前没有测试过，看文档是可以生成ORC的格式。-&amp;gt; b) 原始办法，通过Hive的insert命令将一张原本不是ORC格式的数据，导入到另一个ORC格式中，这">
+<meta name="twitter:title" content="Hello World , Hello PPG , Hello Sunshine">
+<meta name="twitter:description" content="You are always my sunshine…">
   
     <link rel="alternative" href="/atom.xml" title="3h_William" type="application/atom+xml">
   
@@ -67,10 +64,10 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-sqoop_orc" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2015/09/11/sqoop_orc/" class="article-date">
-  <time datetime="2015-09-11T07:00:11.000Z" itemprop="datePublished">2015-09-11</time>
+    <a href="/2015/06/01/hello-world/" class="article-date">
+  <time datetime="2015-06-01T06:08:11.000Z" itemprop="datePublished">2015-06-01</time>
 </a>
     
   </div>
@@ -81,7 +78,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      使用sqoop生成ORC格式的文件，并给Hive加载
+      Hello World , Hello PPG , Hello Sunshine
     </h1>
   
 
@@ -89,43 +86,29 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="背景">背景</h1><p>在当前版本: sqoop-1.4.5(CDH540)中的sqoop并不支持导出格式为orcfile的格式。因此，如果我们想将数据从DB=&gt;HDFS，并生成ORC格式，只有两个办法。</p>
-<p>-&gt; a) 使用HCatalog服务，目前没有测试过，看文档是可以生成ORC的格式。<br>-&gt; b) 原始办法，通过Hive的insert命令将一张原本不是ORC格式的数据，导入到另一个ORC格式中，这样就有了ORC格式的文件。 但该方法会造成时间、资源消耗翻倍。</p>
-<h1 id="DIY">DIY</h1><p>既然如此，自己动手，丰衣足食。介于近年来对于sqoop的使用经验，很方便的定位到了几个地方，并加入了一些类和方法，最终达到了目的。当然，因为我们的需求目前仅仅是从DB = &gt; HDFS，即只是增加了import方法中的参数，并没有在export =&gt; DB中增加。</p>
-<p>具体代码可以参考我已经提供的版本 <a href="https://github.com/3h-william/sqoop-orc-import" target="_blank" rel="external">link</a><br>使用ant编译后，替换原来的sqoop jar即可。</p>
-<h1 id="关键点">关键点</h1><p>-&gt; 1) 使用hive的提供的TypeInfoUtils 构建ORC file的Schema.并传递到每一个Map中<br>-&gt; 2) 使用 org.apache.hadoop.hive.ql.io.orc.OrcNewOutputFormat 作为输出格式</p>
-<hr>
-<p>作者：3h-william<br>联系: <a href="https://github.com/3h-william" target="_blank" rel="external">https://github.com/3h-william</a><br>出处：<a href="http://3h-william.github.io" target="_blank" rel="external">http://3h-william.github.io</a>  </p>
-<hr>
+        <p>You are always my sunshine…</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/09/11/sqoop_orc/" data-id="cigx3wnt80006ikgtbmxaqcdy" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/06/01/hello-world/" data-id="cigx3wntb000bikgtmzn4ftkm" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hive/">hive</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sqoop/">sqoop</a></li></ul>
-
     </footer>
   </div>
   
     
 <nav id="article-nav">
   
-    <a href="/2015/10/05/als_report/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2015/06/07/hbase_tsdb_issue/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Newer</strong>
       <div class="article-nav-title">
         
-          推荐算法与协同过滤
+          Open Tsdb 引起 HBase的严重问题
         
       </div>
     </a>
   
-  
-    <a href="/2015/09/08/hbase_balance_problem/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">HBase Coprocessor问题引起异常Balance</div>
-    </a>
   
 </nav>
 
