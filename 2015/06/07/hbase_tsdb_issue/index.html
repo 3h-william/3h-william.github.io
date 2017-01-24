@@ -3,35 +3,39 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Open Tsdb 引起 HBase的严重问题 | 3h_William</title>
+  <title>Open Tsdb 引起 HBase的严重问题 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="背景前一段时间，内部用到TSDB，发现经常引起HBase服务挂掉。最终，我这里经过一些排查，找到了问题。并且，我们已经向社区提出了这个问题。在这里，以此记录解决过程。  
 一. 根本原因:因为TSDB的合并导致单条记录的column非常大。一旦大于MAX_CHUNK_SIZE_KEY = “hfile.index.block.max.size”(默认128K);  就由一定几率使得Memstore">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Open Tsdb 引起 HBase的严重问题">
 <meta property="og:url" content="http://yoursite.com/2015/06/07/hbase_tsdb_issue/index.html">
-<meta property="og:site_name" content="3h_William">
+<meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="背景前一段时间，内部用到TSDB，发现经常引起HBase服务挂掉。最终，我这里经过一些排查，找到了问题。并且，我们已经向社区提出了这个问题。在这里，以此记录解决过程。  
 一. 根本原因:因为TSDB的合并导致单条记录的column非常大。一旦大于MAX_CHUNK_SIZE_KEY = “hfile.index.block.max.size”(默认128K);  就由一定几率使得Memstore">
 <meta property="og:image" content="http://yoursite.com/img/tsdb_hbase_issue/1.jpg">
 <meta property="og:image" content="http://yoursite.com/img/tsdb_hbase_issue/2.jpg">
 <meta property="og:image" content="http://yoursite.com/img/tsdb_hbase_issue/3.jpg">
-<meta property="og:updated_time" content="2015-11-13T03:27:50.511Z">
+<meta property="og:updated_time" content="2017-01-24T06:49:38.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Open Tsdb 引起 HBase的严重问题">
 <meta name="twitter:description" content="背景前一段时间，内部用到TSDB，发现经常引起HBase服务挂掉。最终，我这里经过一些排查，找到了问题。并且，我们已经向社区提出了这个问题。在这里，以此记录解决过程。  
 一. 根本原因:因为TSDB的合并导致单条记录的column非常大。一旦大于MAX_CHUNK_SIZE_KEY = “hfile.index.block.max.size”(默认128K);  就由一定几率使得Memstore">
+<meta name="twitter:image" content="http://yoursite.com/img/tsdb_hbase_issue/1.jpg">
   
-    <link rel="alternative" href="/atom.xml" title="3h_William" type="application/atom+xml">
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
   
-  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
-  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
   
 
 </head>
+
 <body>
   <div id="container">
     <div id="wrap">
@@ -40,12 +44,8 @@
   <div id="header-outer" class="outer">
     <div id="header-title" class="inner">
       <h1 id="logo-wrap">
-        <a href="/" id="logo">3h_William</a>
+        <a href="/" id="logo">Hexo</a>
       </h1>
-      
-        <h2 id="subtitle-wrap">
-          <a href="/" id="subtitle">Hello Sunshine</a>
-        </h2>
       
     </div>
     <div id="header-inner" class="inner">
@@ -59,9 +59,9 @@
       </nav>
       <nav id="sub-nav">
         
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="Flux RSS"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
@@ -92,13 +92,13 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="背景">背景</h1><p>前一段时间，内部用到TSDB，发现经常引起HBase服务挂掉。最终，我这里经过一些排查，找到了问题。<br>并且，我们已经向社区提出了这个问题。在这里，以此记录解决过程。  </p>
-<h1 id="一-_根本原因:">一. 根本原因:</h1><p>因为TSDB的合并导致单条记录的column非常大。一旦大于MAX_CHUNK_SIZE_KEY = “hfile.index.block.max.size”(默认128K);  就由一定几率使得Memstore  Flush无限进行。<br>并且本地已经模拟出该场景。我插入了一条Column非常大的记录(150K) ，然后调用flush， RS进入死循环，HDFS文件不断增大.</p>
+        <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>前一段时间，内部用到TSDB，发现经常引起HBase服务挂掉。最终，我这里经过一些排查，找到了问题。<br>并且，我们已经向社区提出了这个问题。在这里，以此记录解决过程。  </p>
+<h1 id="一-根本原因"><a href="#一-根本原因" class="headerlink" title="一. 根本原因:"></a>一. 根本原因:</h1><p>因为TSDB的合并导致单条记录的column非常大。一旦大于MAX_CHUNK_SIZE_KEY = “hfile.index.block.max.size”(默认128K);  就由一定几率使得Memstore  Flush无限进行。<br>并且本地已经模拟出该场景。我插入了一条Column非常大的记录(150K) ，然后调用flush， RS进入死循环，HDFS文件不断增大.</p>
 <p><img src="/img/tsdb_hbase_issue/1.jpg" alt=""></p>
-<h1 id="二-_大致分析流程如下">二. 大致分析流程如下</h1><p>1.今天再次走代码流程和日志记录，纠正了昨天判断是HBase Compaction触发导致的问题。(出问题的那个点，并没有进行HBase层面的Compact)<br>2.进一步确认，是因为HBase的Memstore Flush成HFile导致。 （Hfile也是存在于Region/.tmp中,在一个时间点,HBase都做了一次flush<br>3.随后定位到，问题出在了Flush Memstore的时候，需要生产HFile V2 下的BlockData Index, 并导致写索引的死循环。  </p>
-<h2 id="接着，让我们来看看，代码究竟做了些什么事情:">接着，让我们来看看，代码究竟做了些什么事情:</h2><p>a)选取第一条KV，作为RootChunk，建立索引<br><img src="/img/tsdb_hbase_issue/2.jpg" alt=""><br>b)写完Level Two的索引数据，但是还是要将Parent的索引写到Level One的索引中<br><img src="/img/tsdb_hbase_issue/3.jpg" alt=""><br>c)进入a图中的死循环。 反复调用写Root KV的索引，但都因为length太大，再次写子索引，周而复始，至死不休。</p>
-<h1 id="三-_社区反映">三. 社区反映</h1><p><a href="https://issues.apache.org/jira/browse/HBASE-12320" target="_blank" rel="external">https://issues.apache.org/jira/browse/HBASE-12320</a><br>这是去年在JIRA 上提出的 ISSUE，但一直都没有得到解决。虽然已经有人意识到了问题。<br>事实上，不论是ColumnName的大小，或是Rowkey的大小，或是Faimily的大小，一旦超过这个阀值，就会出问题。<br>同时，只是建议，HBase的单个KV的大小，不超过128K。   </p>
-<h1 id="四-_解决方案">四. 解决方案</h1><p>注意TSDB的推送的数据，不要分的太小。或者，关闭compaction(TSDB层面)  </p>
+<h1 id="二-大致分析流程如下"><a href="#二-大致分析流程如下" class="headerlink" title="二. 大致分析流程如下"></a>二. 大致分析流程如下</h1><p>1.今天再次走代码流程和日志记录，纠正了昨天判断是HBase Compaction触发导致的问题。(出问题的那个点，并没有进行HBase层面的Compact)<br>2.进一步确认，是因为HBase的Memstore Flush成HFile导致。 （Hfile也是存在于Region/.tmp中,在一个时间点,HBase都做了一次flush<br>3.随后定位到，问题出在了Flush Memstore的时候，需要生产HFile V2 下的BlockData Index, 并导致写索引的死循环。  </p>
+<h2 id="接着，让我们来看看，代码究竟做了些什么事情"><a href="#接着，让我们来看看，代码究竟做了些什么事情" class="headerlink" title="接着，让我们来看看，代码究竟做了些什么事情:"></a>接着，让我们来看看，代码究竟做了些什么事情:</h2><p>a)选取第一条KV，作为RootChunk，建立索引<br><img src="/img/tsdb_hbase_issue/2.jpg" alt=""><br>b)写完Level Two的索引数据，但是还是要将Parent的索引写到Level One的索引中<br><img src="/img/tsdb_hbase_issue/3.jpg" alt=""><br>c)进入a图中的死循环。 反复调用写Root KV的索引，但都因为length太大，再次写子索引，周而复始，至死不休。</p>
+<h1 id="三-社区反映"><a href="#三-社区反映" class="headerlink" title="三. 社区反映"></a>三. 社区反映</h1><p><a href="https://issues.apache.org/jira/browse/HBASE-12320" target="_blank" rel="external">https://issues.apache.org/jira/browse/HBASE-12320</a><br>这是去年在JIRA 上提出的 ISSUE，但一直都没有得到解决。虽然已经有人意识到了问题。<br>事实上，不论是ColumnName的大小，或是Rowkey的大小，或是Faimily的大小，一旦超过这个阀值，就会出问题。<br>同时，只是建议，HBase的单个KV的大小，不超过128K。   </p>
+<h1 id="四-解决方案"><a href="#四-解决方案" class="headerlink" title="四. 解决方案"></a>四. 解决方案</h1><p>注意TSDB的推送的数据，不要分的太小。或者，关闭compaction(TSDB层面)  </p>
 <hr>
 <p>作者：3h-william<br>联系: <a href="https://github.com/3h-william" target="_blank" rel="external">https://github.com/3h-william</a><br>出处：<a href="http://3h-william.github.io" target="_blank" rel="external">http://3h-william.github.io</a>  </p>
 <hr>
@@ -106,7 +106,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/06/07/hbase_tsdb_issue/" data-id="cigx431bs000c8wgtfwuz8uqw" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/06/07/hbase_tsdb_issue/" data-id="ciyb5wmrh00040y094ibvbx6v" class="article-share-link">Partager</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hbase/">hbase</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tsdb/">tsdb</a></li></ul>
@@ -118,7 +118,7 @@
 <nav id="article-nav">
   
     <a href="/2015/08/10/elasticsearch_dc/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
+      <strong class="article-nav-caption">Récent</strong>
       <div class="article-nav-title">
         
           为ElasticSearch 添加支持跨DC的特性
@@ -128,7 +128,7 @@
   
   
     <a href="/2015/06/01/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
+      <strong class="article-nav-caption">Ancien</strong>
       <div class="article-nav-title">Hello World , Hello PPG , Hello Sunshine</div>
     </a>
   
@@ -142,19 +142,21 @@
           <aside id="sidebar">
   
     
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tags</h3>
-    <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/MachineLearning/">MachineLearning</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/elasticsearch/">elasticsearch</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hbase/">hbase</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hive/">hive</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/search/">search</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sqoop/">sqoop</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tsdb/">tsdb</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zookeeper/">zookeeper</a><span class="tag-list-count">1</span></li></ul>
-    </div>
-  </div>
 
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Tag Cloud</h3>
+    <h3 class="widget-title">Mot-clés</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/MachineLearning/">MachineLearning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/elasticsearch/">elasticsearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hbase/">hbase</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hive/">hive</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/search/">search</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sqoop/">sqoop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tsdb/">tsdb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zookeeper/">zookeeper</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Nuage de mot-clés</h3>
     <div class="widget tagcloud">
       <a href="/tags/MachineLearning/" style="font-size: 10px;">MachineLearning</a> <a href="/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/tags/hbase/" style="font-size: 20px;">hbase</a> <a href="/tags/hive/" style="font-size: 10px;">hive</a> <a href="/tags/search/" style="font-size: 10px;">search</a> <a href="/tags/sqoop/" style="font-size: 10px;">sqoop</a> <a href="/tags/tsdb/" style="font-size: 10px;">tsdb</a> <a href="/tags/zookeeper/" style="font-size: 10px;">zookeeper</a>
     </div>
@@ -165,14 +167,15 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a><span class="archive-list-count">2</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a></li></ul>
     </div>
   </div>
+
 
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Recents</h3>
+    <h3 class="widget-title">Articles récents</h3>
     <div class="widget">
       <ul>
         
@@ -208,8 +211,8 @@
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2015 3h_william<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      &copy; 2017 John Doe<br>
+      Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
 </footer>
@@ -226,11 +229,11 @@
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 
 
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
-  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
 
 
-<script src="/js/script.js" type="text/javascript"></script>
+<script src="/js/script.js"></script>
 
   </div>
 </body>

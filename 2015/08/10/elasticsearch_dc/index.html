@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>为ElasticSearch 添加支持跨DC的特性 | 3h_William</title>
+  <title>为ElasticSearch 添加支持跨DC的特性 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="背景无意间发现，去年年初提到社区的改动，在去年8月得到回复，虽然没有被采纳…https://github.com/elastic/elasticsearch/pull/4651#issuecomment-51578376对方提出两点:
 
@@ -14,7 +14,7 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="为ElasticSearch 添加支持跨DC的特性">
 <meta property="og:url" content="http://yoursite.com/2015/08/10/elasticsearch_dc/index.html">
-<meta property="og:site_name" content="3h_William">
+<meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="背景无意间发现，去年年初提到社区的改动，在去年8月得到回复，虽然没有被采纳…https://github.com/elastic/elasticsearch/pull/4651#issuecomment-51578376对方提出两点:
 
 不赞成ElasticSearch跨越数据中心构建。   
@@ -22,7 +22,7 @@
 
 不过，目前为止，我认为这个特性有它的价值，所以在此分享一些">
 <meta property="og:image" content="http://yoursite.com/img/elasticsearch_dc/1.png">
-<meta property="og:updated_time" content="2015-11-13T03:25:32.205Z">
+<meta property="og:updated_time" content="2017-01-24T06:49:38.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="为ElasticSearch 添加支持跨DC的特性">
 <meta name="twitter:description" content="背景无意间发现，去年年初提到社区的改动，在去年8月得到回复，虽然没有被采纳…https://github.com/elastic/elasticsearch/pull/4651#issuecomment-51578376对方提出两点:
@@ -31,17 +31,21 @@
 认为同步和延迟会造成比较大的问题。    
 
 不过，目前为止，我认为这个特性有它的价值，所以在此分享一些">
+<meta name="twitter:image" content="http://yoursite.com/img/elasticsearch_dc/1.png">
   
-    <link rel="alternative" href="/atom.xml" title="3h_William" type="application/atom+xml">
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
   
-  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
-  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
   
 
 </head>
+
 <body>
   <div id="container">
     <div id="wrap">
@@ -50,12 +54,8 @@
   <div id="header-outer" class="outer">
     <div id="header-title" class="inner">
       <h1 id="logo-wrap">
-        <a href="/" id="logo">3h_William</a>
+        <a href="/" id="logo">Hexo</a>
       </h1>
-      
-        <h2 id="subtitle-wrap">
-          <a href="/" id="subtitle">Hello Sunshine</a>
-        </h2>
       
     </div>
     <div id="header-inner" class="inner">
@@ -69,9 +69,9 @@
       </nav>
       <nav id="sub-nav">
         
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="Flux RSS"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
@@ -102,24 +102,24 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="背景">背景</h1><p>无意间发现，去年年初提到社区的改动，在去年8月得到回复，虽然没有被采纳…<br><a href="https://github.com/elastic/elasticsearch/pull/4651#issuecomment-51578376" target="_blank" rel="external">https://github.com/elastic/elasticsearch/pull/4651#issuecomment-51578376</a><br>对方提出两点:</p>
+        <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>无意间发现，去年年初提到社区的改动，在去年8月得到回复，虽然没有被采纳…<br><a href="https://github.com/elastic/elasticsearch/pull/4651#issuecomment-51578376" target="_blank" rel="external">https://github.com/elastic/elasticsearch/pull/4651#issuecomment-51578376</a><br>对方提出两点:</p>
 <ol>
 <li>不赞成ElasticSearch跨越数据中心构建。   </li>
 <li>认为同步和延迟会造成比较大的问题。    </li>
 </ol>
-<h3 id="不过，目前为止，我认为这个特性有它的价值，所以在此分享一些当初的设计思想和改造方法。同时，透露一下，这个改造在公司内部也正常稳定运行了近一年多"><strong>不过，目前为止，我认为这个特性有它的价值，所以在此分享一些当初的设计思想和改造方法。同时，透露一下，这个改造在公司内部也正常稳定运行了近一年多</strong></h3><h1 id="改进点">改进点</h1><p>Elastic Search的节点设计思想是，每一组索引分片，由一个primary做write操作，而前天的replica做读操作。<br>那么，如果对于一个跨数据中心的elastic Search设计，将会因为以下的场景，带来一些问题:</p>
+<h3 id="不过，目前为止，我认为这个特性有它的价值，所以在此分享一些当初的设计思想和改造方法。同时，透露一下，这个改造在公司内部也正常稳定运行了近一年多"><a href="#不过，目前为止，我认为这个特性有它的价值，所以在此分享一些当初的设计思想和改造方法。同时，透露一下，这个改造在公司内部也正常稳定运行了近一年多" class="headerlink" title="不过，目前为止，我认为这个特性有它的价值，所以在此分享一些当初的设计思想和改造方法。同时，透露一下，这个改造在公司内部也正常稳定运行了近一年多"></a><strong>不过，目前为止，我认为这个特性有它的价值，所以在此分享一些当初的设计思想和改造方法。同时，透露一下，这个改造在公司内部也正常稳定运行了近一年多</strong></h3><h1 id="改进点"><a href="#改进点" class="headerlink" title="改进点"></a>改进点</h1><p>Elastic Search的节点设计思想是，每一组索引分片，由一个primary做write操作，而前天的replica做读操作。<br>那么，如果对于一个跨数据中心的elastic Search设计，将会因为以下的场景，带来一些问题:</p>
 <ol>
 <li>如果所有的写操作是由一个数据中心完成（事实上，大多数情况都是如此），由一个主的数据中心处理数据，然后分发到其他的数据中心(跨location)</li>
 <li>而ES的Primary的规则，并不支持将Primary都分配在同属于一个location的Node，而是会根据其自身的集中策略来分配</li>
 <li>根据以上两点，最终的结果是: 如果由两个数据中心，Primary可能分配到任何的数据中心，造成write操作会分散在不同的location</li>
 </ol>
-<h3 id="而我们要做的是，提供一种策略，使得primary分配到同一个location下的index分片"><strong>而我们要做的是，提供一种策略，使得primary分配到同一个location下的index分片</strong></h3><h1 id="改进效果">改进效果</h1><p><img src="/img/elasticsearch_dc/1.png" alt="分布"></p>
-<h3 id="这种策略可以支持任何的情况:">这种策略可以支持任何的情况:</h3><ol>
+<h3 id="而我们要做的是，提供一种策略，使得primary分配到同一个location下的index分片"><a href="#而我们要做的是，提供一种策略，使得primary分配到同一个location下的index分片" class="headerlink" title="而我们要做的是，提供一种策略，使得primary分配到同一个location下的index分片"></a><strong>而我们要做的是，提供一种策略，使得primary分配到同一个location下的index分片</strong></h3><h1 id="改进效果"><a href="#改进效果" class="headerlink" title="改进效果"></a>改进效果</h1><p><img src="/img/elasticsearch_dc/1.png" alt="分布"></p>
+<h3 id="这种策略可以支持任何的情况"><a href="#这种策略可以支持任何的情况" class="headerlink" title="这种策略可以支持任何的情况:"></a>这种策略可以支持任何的情况:</h3><ol>
 <li>primary所在的location全部down掉，只剩下replica的location</li>
 <li>任意顺序启动Node.</li>
 <li>任意一种HA的可能情况。  </li>
 </ol>
-<h3 id="代码部分，可参考我已经提交的版本">代码部分，可参考我已经提交的版本</h3><p><a href="https://github.com/3h-william/elasticsearch-dc-version0.0.1" target="_blank" rel="external">https://github.com/3h-william/elasticsearch-dc-version0.0.1</a></p>
+<h3 id="代码部分，可参考我已经提交的版本"><a href="#代码部分，可参考我已经提交的版本" class="headerlink" title="代码部分，可参考我已经提交的版本"></a>代码部分，可参考我已经提交的版本</h3><p><a href="https://github.com/3h-william/elasticsearch-dc-version0.0.1" target="_blank" rel="external">https://github.com/3h-william/elasticsearch-dc-version0.0.1</a></p>
 <hr>
 <p>作者：3h-william<br>联系: <a href="https://github.com/3h-william" target="_blank" rel="external">https://github.com/3h-william</a><br>出处：<a href="http://3h-william.github.io" target="_blank" rel="external">http://3h-william.github.io</a>  </p>
 <hr>
@@ -127,7 +127,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/08/10/elasticsearch_dc/" data-id="cigx431c0000l8wgt7pm8alr3" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/08/10/elasticsearch_dc/" data-id="ciyb5wmrb00010y095849xj97" class="article-share-link">Partager</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/elasticsearch/">elasticsearch</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/search/">search</a></li></ul>
@@ -139,7 +139,7 @@
 <nav id="article-nav">
   
     <a href="/2015/08/27/hbase-bulkload/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
+      <strong class="article-nav-caption">Récent</strong>
       <div class="article-nav-title">
         
           hbase bulkload 相关整理
@@ -149,7 +149,7 @@
   
   
     <a href="/2015/06/07/hbase_tsdb_issue/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
+      <strong class="article-nav-caption">Ancien</strong>
       <div class="article-nav-title">Open Tsdb 引起 HBase的严重问题</div>
     </a>
   
@@ -163,19 +163,21 @@
           <aside id="sidebar">
   
     
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tags</h3>
-    <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/MachineLearning/">MachineLearning</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/elasticsearch/">elasticsearch</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hbase/">hbase</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hive/">hive</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/search/">search</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sqoop/">sqoop</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tsdb/">tsdb</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zookeeper/">zookeeper</a><span class="tag-list-count">1</span></li></ul>
-    </div>
-  </div>
 
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Tag Cloud</h3>
+    <h3 class="widget-title">Mot-clés</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/MachineLearning/">MachineLearning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/elasticsearch/">elasticsearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hbase/">hbase</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hive/">hive</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/search/">search</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sqoop/">sqoop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tsdb/">tsdb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zookeeper/">zookeeper</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Nuage de mot-clés</h3>
     <div class="widget tagcloud">
       <a href="/tags/MachineLearning/" style="font-size: 10px;">MachineLearning</a> <a href="/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/tags/hbase/" style="font-size: 20px;">hbase</a> <a href="/tags/hive/" style="font-size: 10px;">hive</a> <a href="/tags/search/" style="font-size: 10px;">search</a> <a href="/tags/sqoop/" style="font-size: 10px;">sqoop</a> <a href="/tags/tsdb/" style="font-size: 10px;">tsdb</a> <a href="/tags/zookeeper/" style="font-size: 10px;">zookeeper</a>
     </div>
@@ -186,14 +188,15 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a><span class="archive-list-count">2</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a></li></ul>
     </div>
   </div>
+
 
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Recents</h3>
+    <h3 class="widget-title">Articles récents</h3>
     <div class="widget">
       <ul>
         
@@ -229,8 +232,8 @@
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2015 3h_william<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      &copy; 2017 John Doe<br>
+      Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
 </footer>
@@ -247,11 +250,11 @@
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 
 
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
-  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
 
 
-<script src="/js/script.js" type="text/javascript"></script>
+<script src="/js/script.js"></script>
 
   </div>
 </body>

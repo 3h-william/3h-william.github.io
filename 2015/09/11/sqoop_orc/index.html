@@ -3,32 +3,35 @@
 <head>
   <meta charset="utf-8">
   
-  <title>使用sqoop生成ORC格式的文件，并给Hive加载 | 3h_William</title>
+  <title>使用sqoop生成ORC格式的文件，并给Hive加载 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="背景在当前版本: sqoop-1.4.5(CDH540)中的sqoop并不支持导出格式为orcfile的格式。因此，如果我们想将数据从DB=&amp;gt;HDFS，并生成ORC格式，只有两个办法。
 -&amp;gt; a) 使用HCatalog服务，目前没有测试过，看文档是可以生成ORC的格式。-&amp;gt; b) 原始办法，通过Hive的insert命令将一张原本不是ORC格式的数据，导入到另一个ORC格式中，这">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用sqoop生成ORC格式的文件，并给Hive加载">
 <meta property="og:url" content="http://yoursite.com/2015/09/11/sqoop_orc/index.html">
-<meta property="og:site_name" content="3h_William">
+<meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="背景在当前版本: sqoop-1.4.5(CDH540)中的sqoop并不支持导出格式为orcfile的格式。因此，如果我们想将数据从DB=&amp;gt;HDFS，并生成ORC格式，只有两个办法。
 -&amp;gt; a) 使用HCatalog服务，目前没有测试过，看文档是可以生成ORC的格式。-&amp;gt; b) 原始办法，通过Hive的insert命令将一张原本不是ORC格式的数据，导入到另一个ORC格式中，这">
-<meta property="og:updated_time" content="2015-11-10T01:35:47.800Z">
+<meta property="og:updated_time" content="2017-01-24T06:49:38.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用sqoop生成ORC格式的文件，并给Hive加载">
 <meta name="twitter:description" content="背景在当前版本: sqoop-1.4.5(CDH540)中的sqoop并不支持导出格式为orcfile的格式。因此，如果我们想将数据从DB=&amp;gt;HDFS，并生成ORC格式，只有两个办法。
 -&amp;gt; a) 使用HCatalog服务，目前没有测试过，看文档是可以生成ORC的格式。-&amp;gt; b) 原始办法，通过Hive的insert命令将一张原本不是ORC格式的数据，导入到另一个ORC格式中，这">
   
-    <link rel="alternative" href="/atom.xml" title="3h_William" type="application/atom+xml">
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
   
-  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
-  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
   
 
 </head>
+
 <body>
   <div id="container">
     <div id="wrap">
@@ -37,12 +40,8 @@
   <div id="header-outer" class="outer">
     <div id="header-title" class="inner">
       <h1 id="logo-wrap">
-        <a href="/" id="logo">3h_William</a>
+        <a href="/" id="logo">Hexo</a>
       </h1>
-      
-        <h2 id="subtitle-wrap">
-          <a href="/" id="subtitle">Hello Sunshine</a>
-        </h2>
       
     </div>
     <div id="header-inner" class="inner">
@@ -56,9 +55,9 @@
       </nav>
       <nav id="sub-nav">
         
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="Flux RSS"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
@@ -89,11 +88,11 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="背景">背景</h1><p>在当前版本: sqoop-1.4.5(CDH540)中的sqoop并不支持导出格式为orcfile的格式。因此，如果我们想将数据从DB=&gt;HDFS，并生成ORC格式，只有两个办法。</p>
+        <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>在当前版本: sqoop-1.4.5(CDH540)中的sqoop并不支持导出格式为orcfile的格式。因此，如果我们想将数据从DB=&gt;HDFS，并生成ORC格式，只有两个办法。</p>
 <p>-&gt; a) 使用HCatalog服务，目前没有测试过，看文档是可以生成ORC的格式。<br>-&gt; b) 原始办法，通过Hive的insert命令将一张原本不是ORC格式的数据，导入到另一个ORC格式中，这样就有了ORC格式的文件。 但该方法会造成时间、资源消耗翻倍。</p>
-<h1 id="DIY">DIY</h1><p>既然如此，自己动手，丰衣足食。介于近年来对于sqoop的使用经验，很方便的定位到了几个地方，并加入了一些类和方法，最终达到了目的。当然，因为我们的需求目前仅仅是从DB = &gt; HDFS，即只是增加了import方法中的参数，并没有在export =&gt; DB中增加。</p>
+<h1 id="DIY"><a href="#DIY" class="headerlink" title="DIY"></a>DIY</h1><p>既然如此，自己动手，丰衣足食。介于近年来对于sqoop的使用经验，很方便的定位到了几个地方，并加入了一些类和方法，最终达到了目的。当然，因为我们的需求目前仅仅是从DB = &gt; HDFS，即只是增加了import方法中的参数，并没有在export =&gt; DB中增加。</p>
 <p>具体代码可以参考我已经提供的版本 <a href="https://github.com/3h-william/sqoop-orc-import" target="_blank" rel="external">link</a><br>使用ant编译后，替换原来的sqoop jar即可。</p>
-<h1 id="关键点">关键点</h1><p>-&gt; 1) 使用hive的提供的TypeInfoUtils 构建ORC file的Schema.并传递到每一个Map中<br>-&gt; 2) 使用 org.apache.hadoop.hive.ql.io.orc.OrcNewOutputFormat 作为输出格式</p>
+<h1 id="关键点"><a href="#关键点" class="headerlink" title="关键点"></a>关键点</h1><p>-&gt; 1) 使用hive的提供的TypeInfoUtils 构建ORC file的Schema.并传递到每一个Map中<br>-&gt; 2) 使用 org.apache.hadoop.hive.ql.io.orc.OrcNewOutputFormat 作为输出格式</p>
 <hr>
 <p>作者：3h-william<br>联系: <a href="https://github.com/3h-william" target="_blank" rel="external">https://github.com/3h-william</a><br>出处：<a href="http://3h-william.github.io" target="_blank" rel="external">http://3h-william.github.io</a>  </p>
 <hr>
@@ -101,7 +100,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/09/11/sqoop_orc/" data-id="cigx431bn00068wgtnj07io23" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/09/11/sqoop_orc/" data-id="ciyb5wmrk00080y09ohe2zfaw" class="article-share-link">Partager</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hive/">hive</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sqoop/">sqoop</a></li></ul>
@@ -113,7 +112,7 @@
 <nav id="article-nav">
   
     <a href="/2015/10/05/als_report/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
+      <strong class="article-nav-caption">Récent</strong>
       <div class="article-nav-title">
         
           推荐算法与协同过滤
@@ -123,7 +122,7 @@
   
   
     <a href="/2015/09/08/hbase_balance_problem/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
+      <strong class="article-nav-caption">Ancien</strong>
       <div class="article-nav-title">HBase Coprocessor问题引起异常Balance</div>
     </a>
   
@@ -137,19 +136,21 @@
           <aside id="sidebar">
   
     
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tags</h3>
-    <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/MachineLearning/">MachineLearning</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/elasticsearch/">elasticsearch</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hbase/">hbase</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hive/">hive</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/search/">search</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sqoop/">sqoop</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tsdb/">tsdb</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zookeeper/">zookeeper</a><span class="tag-list-count">1</span></li></ul>
-    </div>
-  </div>
 
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Tag Cloud</h3>
+    <h3 class="widget-title">Mot-clés</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/MachineLearning/">MachineLearning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/elasticsearch/">elasticsearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hbase/">hbase</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hive/">hive</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/search/">search</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sqoop/">sqoop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tsdb/">tsdb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zookeeper/">zookeeper</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Nuage de mot-clés</h3>
     <div class="widget tagcloud">
       <a href="/tags/MachineLearning/" style="font-size: 10px;">MachineLearning</a> <a href="/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/tags/hbase/" style="font-size: 20px;">hbase</a> <a href="/tags/hive/" style="font-size: 10px;">hive</a> <a href="/tags/search/" style="font-size: 10px;">search</a> <a href="/tags/sqoop/" style="font-size: 10px;">sqoop</a> <a href="/tags/tsdb/" style="font-size: 10px;">tsdb</a> <a href="/tags/zookeeper/" style="font-size: 10px;">zookeeper</a>
     </div>
@@ -160,14 +161,15 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a><span class="archive-list-count">2</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a></li></ul>
     </div>
   </div>
+
 
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Recents</h3>
+    <h3 class="widget-title">Articles récents</h3>
     <div class="widget">
       <ul>
         
@@ -203,8 +205,8 @@
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2015 3h_william<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      &copy; 2017 John Doe<br>
+      Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
 </footer>
@@ -221,11 +223,11 @@
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 
 
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
-  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
 
 
-<script src="/js/script.js" type="text/javascript"></script>
+<script src="/js/script.js"></script>
 
   </div>
 </body>
