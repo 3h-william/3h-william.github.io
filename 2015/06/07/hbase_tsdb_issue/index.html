@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Open Tsdb 引起 HBase的严重问题 | Hexo</title>
+  <title>Open Tsdb 引起 HBase的严重问题 | 3h_william</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="背景前一段时间，内部用到TSDB，发现经常引起HBase服务挂掉。最终，我这里经过一些排查，找到了问题。并且，我们已经向社区提出了这个问题。在这里，以此记录解决过程。  
 一. 根本原因:因为TSDB的合并导致单条记录的column非常大。一旦大于MAX_CHUNK_SIZE_KEY = “hfile.index.block.max.size”(默认128K);  就由一定几率使得Memstore">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Open Tsdb 引起 HBase的严重问题">
 <meta property="og:url" content="http://yoursite.com/2015/06/07/hbase_tsdb_issue/index.html">
-<meta property="og:site_name" content="Hexo">
+<meta property="og:site_name" content="3h_william">
 <meta property="og:description" content="背景前一段时间，内部用到TSDB，发现经常引起HBase服务挂掉。最终，我这里经过一些排查，找到了问题。并且，我们已经向社区提出了这个问题。在这里，以此记录解决过程。  
 一. 根本原因:因为TSDB的合并导致单条记录的column非常大。一旦大于MAX_CHUNK_SIZE_KEY = “hfile.index.block.max.size”(默认128K);  就由一定几率使得Memstore">
 <meta property="og:image" content="http://yoursite.com/img/tsdb_hbase_issue/1.jpg">
@@ -23,7 +23,7 @@
 一. 根本原因:因为TSDB的合并导致单条记录的column非常大。一旦大于MAX_CHUNK_SIZE_KEY = “hfile.index.block.max.size”(默认128K);  就由一定几率使得Memstore">
 <meta name="twitter:image" content="http://yoursite.com/img/tsdb_hbase_issue/1.jpg">
   
-    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+    <link rel="alternate" href="/atom.xml" title="3h_william" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
@@ -44,8 +44,12 @@
   <div id="header-outer" class="outer">
     <div id="header-title" class="inner">
       <h1 id="logo-wrap">
-        <a href="/" id="logo">Hexo</a>
+        <a href="/" id="logo">3h_william</a>
       </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">Hello Sunshine</a>
+        </h2>
       
     </div>
     <div id="header-inner" class="inner">
@@ -59,9 +63,9 @@
       </nav>
       <nav id="sub-nav">
         
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="Flux RSS"></a>
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
@@ -106,7 +110,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/06/07/hbase_tsdb_issue/" data-id="ciyb5wmrh00040y094ibvbx6v" class="article-share-link">Partager</a>
+      <a data-url="http://yoursite.com/2015/06/07/hbase_tsdb_issue/" data-id="ciyb7pldf0008pn0956lgq5bw" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hbase/">hbase</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tsdb/">tsdb</a></li></ul>
@@ -118,7 +122,7 @@
 <nav id="article-nav">
   
     <a href="/2015/08/10/elasticsearch_dc/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Récent</strong>
+      <strong class="article-nav-caption">Newer</strong>
       <div class="article-nav-title">
         
           为ElasticSearch 添加支持跨DC的特性
@@ -128,7 +132,7 @@
   
   
     <a href="/2015/06/01/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Ancien</strong>
+      <strong class="article-nav-caption">Older</strong>
       <div class="article-nav-title">Hello World , Hello PPG , Hello Sunshine</div>
     </a>
   
@@ -146,9 +150,9 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Mot-clés</h3>
+    <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/MachineLearning/">MachineLearning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/elasticsearch/">elasticsearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hbase/">hbase</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hive/">hive</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/search/">search</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sqoop/">sqoop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tsdb/">tsdb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zookeeper/">zookeeper</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/MachineLearning/">MachineLearning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/akka/">akka</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/elasticsearch/">elasticsearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hbase/">hbase</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hive/">hive</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scala/">scala</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/search/">search</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sqoop/">sqoop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tsdb/">tsdb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zookeeper/">zookeeper</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/技术产品/">技术产品</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/技术架构/">技术架构</a></li></ul>
     </div>
   </div>
 
@@ -156,9 +160,9 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Nuage de mot-clés</h3>
+    <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/MachineLearning/" style="font-size: 10px;">MachineLearning</a> <a href="/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/tags/hbase/" style="font-size: 20px;">hbase</a> <a href="/tags/hive/" style="font-size: 10px;">hive</a> <a href="/tags/search/" style="font-size: 10px;">search</a> <a href="/tags/sqoop/" style="font-size: 10px;">sqoop</a> <a href="/tags/tsdb/" style="font-size: 10px;">tsdb</a> <a href="/tags/zookeeper/" style="font-size: 10px;">zookeeper</a>
+      <a href="/tags/MachineLearning/" style="font-size: 10px;">MachineLearning</a> <a href="/tags/akka/" style="font-size: 15px;">akka</a> <a href="/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/tags/hbase/" style="font-size: 20px;">hbase</a> <a href="/tags/hive/" style="font-size: 10px;">hive</a> <a href="/tags/scala/" style="font-size: 10px;">scala</a> <a href="/tags/search/" style="font-size: 10px;">search</a> <a href="/tags/sqoop/" style="font-size: 10px;">sqoop</a> <a href="/tags/tsdb/" style="font-size: 10px;">tsdb</a> <a href="/tags/zookeeper/" style="font-size: 10px;">zookeeper</a> <a href="/tags/技术产品/" style="font-size: 10px;">技术产品</a> <a href="/tags/技术架构/" style="font-size: 10px;">技术架构</a>
     </div>
   </div>
 
@@ -167,7 +171,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a></li></ul>
     </div>
   </div>
 
@@ -175,9 +179,17 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Articles récents</h3>
+    <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2017/01/24/lft/">新一代分布式调度系统--雷峰塔架构</a>
+          </li>
+        
+          <li>
+            <a href="/2017/01/24/akka/">项目中，使用akka的一些经验和总结</a>
+          </li>
         
           <li>
             <a href="/2015/11/10/zookeeper_stuck_dns_network/">使用Zookeeper过程中遇到客户端stuck的问题和解决建议</a>
@@ -189,14 +201,6 @@
         
           <li>
             <a href="/2015/09/11/sqoop_orc/">使用sqoop生成ORC格式的文件，并给Hive加载</a>
-          </li>
-        
-          <li>
-            <a href="/2015/09/08/hbase_balance_problem/">HBase Coprocessor问题引起异常Balance</a>
-          </li>
-        
-          <li>
-            <a href="/2015/08/27/hbase-bulkload/">hbase bulkload 相关整理</a>
           </li>
         
       </ul>
@@ -211,8 +215,8 @@
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2017 John Doe<br>
-      Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>
+      &copy; 2017 3h.william@gmail.com<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
 </footer>

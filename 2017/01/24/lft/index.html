@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>新一代分布式调度系统--雷峰塔架构 | 3h_william</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="背景  分布式任务调度系统工具很多，有Oozie ,Azkaban, airflow… ,大多数，都只能满足部分的需求。对于一个成熟的企业来说，只能当做工具，  不能称之为产品。 对于一些特殊的定制化的需求，是无法满足的。  因此，我们决定自主开发一个任务调度系统，定义为新一代调度系统，吸收各类调度系统的优点，并加以细化，基于Hadoop，不局限于Hadoop，提供完整的工作模式和工作机制。
+什么">
+<meta property="og:type" content="article">
+<meta property="og:title" content="新一代分布式调度系统--雷峰塔架构">
+<meta property="og:url" content="http://yoursite.com/2017/01/24/lft/index.html">
+<meta property="og:site_name" content="3h_william">
+<meta property="og:description" content="背景  分布式任务调度系统工具很多，有Oozie ,Azkaban, airflow… ,大多数，都只能满足部分的需求。对于一个成熟的企业来说，只能当做工具，  不能称之为产品。 对于一些特殊的定制化的需求，是无法满足的。  因此，我们决定自主开发一个任务调度系统，定义为新一代调度系统，吸收各类调度系统的优点，并加以细化，基于Hadoop，不局限于Hadoop，提供完整的工作模式和工作机制。
+什么">
+<meta property="og:image" content="http://yoursite.com/img/lft/lft_cluster_architecture.png">
+<meta property="og:image" content="http://yoursite.com/img/lft/work_flow_architecture.png">
+<meta property="og:image" content="http://yoursite.com/img/lft/plugin_architecture.png">
+<meta property="og:updated_time" content="2017-01-24T07:25:34.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="新一代分布式调度系统--雷峰塔架构">
+<meta name="twitter:description" content="背景  分布式任务调度系统工具很多，有Oozie ,Azkaban, airflow… ,大多数，都只能满足部分的需求。对于一个成熟的企业来说，只能当做工具，  不能称之为产品。 对于一些特殊的定制化的需求，是无法满足的。  因此，我们决定自主开发一个任务调度系统，定义为新一代调度系统，吸收各类调度系统的优点，并加以细化，基于Hadoop，不局限于Hadoop，提供完整的工作模式和工作机制。
+什么">
+<meta name="twitter:image" content="http://yoursite.com/img/lft/lft_cluster_architecture.png">
+  
+    <link rel="alternate" href="/atom.xml" title="3h_william" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">3h_william</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">Hello Sunshine</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-lft" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/01/24/lft/" class="article-date">
+  <time datetime="2017-01-24T07:30:11.000Z" itemprop="datePublished">2017-01-24</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      新一代分布式调度系统--雷峰塔架构
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>  分布式任务调度系统工具很多，有Oozie ,Azkaban, airflow… ,大多数，都只能满足部分的需求。对于一个成熟的企业来说，只能当做工具，<br>  不能称之为产品。 对于一些特殊的定制化的需求，是无法满足的。<br>  因此，我们决定自主开发一个任务调度系统，定义为新一代调度系统，吸收各类调度系统的优点，并加以细化，基于Hadoop，不局限于Hadoop，提供完整的工作模式和工作机制。</p>
+<h1 id="什么是雷峰塔"><a href="#什么是雷峰塔" class="headerlink" title="什么是雷峰塔"></a>什么是雷峰塔</h1><p>雷峰塔是新一代分布式任务调度系统。 可以通过扩展任务类型来丰富调度系统，同时也可以自定义WebUI的部分插件功能。<br>其中WebUI的部分功能设计是参考了 Azkaban 的设计风格。</p>
+<h1 id="对比-Azkaban"><a href="#对比-Azkaban" class="headerlink" title="对比 Azkaban ?"></a>对比 Azkaban ?</h1><p>  更灵活的插件框架，满足更深的定制化需求。<br>  多个工作节点在不同机器上协同调度，可以通过自定义负载均衡来实现任务的分发。<br>  增加执行用户概念，一个执行器上可以用不同用户执行 Hadoop/Spark任务。</p>
+<h1 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h1><p>雷峰塔是一个分布式的任务调度系统。<br>其特点是 :<br> 便于部署<br> 插件灵活，扩展性感<br> Web UI 自定义</p>
+<h2 id="整体架构"><a href="#整体架构" class="headerlink" title="整体架构"></a>整体架构</h2><p>雷峰塔架构是基于Master/Worker的架构模式<br><img src="/img/lft/lft_cluster_architecture.png" alt=""></p>
+<h3 id="调度系统集群有三个角色"><a href="#调度系统集群有三个角色" class="headerlink" title="调度系统集群有三个角色"></a>调度系统集群有三个角色</h3><ol>
+<li>Master<br>Master作为任务协调节点，对外Rest API节点。整个集群只能存在一个。</li>
+<li>Worker<br>Worker节点作为具体任务执行节点。</li>
+<li>Web<br>界面操作入口</li>
+</ol>
+<h3 id="Java-Scala-混合服务"><a href="#Java-Scala-混合服务" class="headerlink" title="Java + Scala 混合服务"></a>Java + Scala 混合服务</h3><pre><code>整个系统混合了 Java + Scala的代码编程
+Java 主要处理对外接口逻辑层
+Scala 主要应用于服务底层
+其中，Akka 作为分布式的基础组件
+插件模块核心用scala编程，也可以用Java/Scala实现自定义插件扩展
+</code></pre><h3 id="HDFS-Mysql"><a href="#HDFS-Mysql" class="headerlink" title="HDFS + Mysql"></a>HDFS + Mysql</h3><p> 雷峰塔需要HDFS和Mysql (基本服务，如果有插件使用 Spark等还需要Yarn/Spark集群)的支持</p>
+<ol>
+<li>Mysql<br>作为整个调度系统的 工作流、任务、调度、权限等使用的数据库。 </li>
+<li>HDFS<br>作为日志记录、调度资源共享的目录</li>
+</ol>
+<h2 id="工作流架构"><a href="#工作流架构" class="headerlink" title="工作流架构"></a>工作流架构</h2><p>以下是工作流提交的运行流程和机制<br><img src="/img/lft/work_flow_architecture.png" alt=""></p>
+<h3 id="Flow-Job-Scheduler-Dependence-说明"><a href="#Flow-Job-Scheduler-Dependence-说明" class="headerlink" title="Flow /Job / Scheduler /Dependence 说明"></a>Flow /Job / Scheduler /Dependence 说明</h3><ol>
+<li><p>Flow (工作流)<br>Flow定义为工作流，由其中字段DAG来 描述一个工作的执行流程，由一组Job组成。</p>
+</li>
+<li><p>Job  (任务)<br>Job定义为任务，描述具体任务是什么。</p>
+</li>
+<li><p>Scheduler (调度)<br>调度定义，描述了调度的定义</p>
+</li>
+<li><p>Dependence (资源)<br>定义了一种资源的表达，某一个任务所需要的一些 jars,配置文件，脚本，都可以放在Dependence 中,<br>其和任务是”多对一”的关系， 一个Dependence可以被多个Job所使用</p>
+</li>
+<li><p>Execution (执行)<br>Flow/Job/Scheduler 是静态概念， 一旦生成可执行的内容，生成与之对应的 FlowExecution,JobExecution和 SchedulerExecution</p>
+</li>
+</ol>
+<h2 id="任务插件框架"><a href="#任务插件框架" class="headerlink" title="任务插件框架"></a>任务插件框架</h2><p><img src="/img/lft/plugin_architecture.png" alt=""></p>
+<p>核心部分是 Job Framework ， 包含了 任务的解析，产生，到分发。<br>Job FrameWork : 开发者可以根据自己的使用场景，定制自己的任务解析器，包括任务的执行规则，流程等。</p>
+<h2 id="Job-Framework"><a href="#Job-Framework" class="headerlink" title="Job Framework"></a>Job Framework</h2><p> 部分组件说明 :</p>
+<ol>
+<li><p>Job Plugin Conf 和 Job Plugin Jars<br>Job Plugin打包的类，必须在所有的Master/Worker节点都部署相同的内容，如果更新，需要重启整个集群 。</p>
+</li>
+<li><p>Job Serialized<br>Job 描述方式，以Json为明文的存储，JobDefine(Object)为序列化对象生成<br>Master根据配置文件、数据库内容、参数等，构建了一个 Job Define，并经过序列化后生成ExecutionRequestContent发送到 Worker，由Worker解析、执行</p>
+</li>
+<li><p>Job Generator<br>Job 生成器 ,在Master端执行，负责生成 Job Define</p>
+</li>
+<li><p>Job Executor<br>Job 执行器，在Worker端执行，负责解析 Job Define，并且执行具体的job</p>
+</li>
+</ol>
+<h2 id="Load-Balance"><a href="#Load-Balance" class="headerlink" title="Load Balance"></a>Load Balance</h2><p>  任务分发策略，也支持自定义。<br>  目前支持的策略为: </p>
+<ol>
+<li>round-robin :        轮训选择一个节点执行</li>
+<li>one-manually :       指定任务在某一个节点执行</li>
+</ol>
+<hr>
+<p>作者：3h-william<br>联系: <a href="https://github.com/3h-william" target="_blank" rel="external">https://github.com/3h-william</a><br>出处：<a href="http://3h-william.github.io" target="_blank" rel="external">http://3h-william.github.io</a>  </p>
+<hr>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/01/24/lft/" data-id="ciyb7pldq000fpn0946ueh7mj" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/akka/">akka</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/scala/">scala</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/技术产品/">技术产品</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/技术架构/">技术架构</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2017/01/24/akka/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">项目中，使用akka的一些经验和总结</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/MachineLearning/">MachineLearning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/akka/">akka</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/elasticsearch/">elasticsearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hbase/">hbase</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hive/">hive</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scala/">scala</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/search/">search</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sqoop/">sqoop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tsdb/">tsdb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zookeeper/">zookeeper</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/技术产品/">技术产品</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/技术架构/">技术架构</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/MachineLearning/" style="font-size: 10px;">MachineLearning</a> <a href="/tags/akka/" style="font-size: 15px;">akka</a> <a href="/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/tags/hbase/" style="font-size: 20px;">hbase</a> <a href="/tags/hive/" style="font-size: 10px;">hive</a> <a href="/tags/scala/" style="font-size: 10px;">scala</a> <a href="/tags/search/" style="font-size: 10px;">search</a> <a href="/tags/sqoop/" style="font-size: 10px;">sqoop</a> <a href="/tags/tsdb/" style="font-size: 10px;">tsdb</a> <a href="/tags/zookeeper/" style="font-size: 10px;">zookeeper</a> <a href="/tags/技术产品/" style="font-size: 10px;">技术产品</a> <a href="/tags/技术架构/" style="font-size: 10px;">技术架构</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/01/24/lft/">新一代分布式调度系统--雷峰塔架构</a>
+          </li>
+        
+          <li>
+            <a href="/2017/01/24/akka/">项目中，使用akka的一些经验和总结</a>
+          </li>
+        
+          <li>
+            <a href="/2015/11/10/zookeeper_stuck_dns_network/">使用Zookeeper过程中遇到客户端stuck的问题和解决建议</a>
+          </li>
+        
+          <li>
+            <a href="/2015/10/05/als_report/">推荐算法与协同过滤</a>
+          </li>
+        
+          <li>
+            <a href="/2015/09/11/sqoop_orc/">使用sqoop生成ORC格式的文件，并给Hive加载</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 3h.william@gmail.com<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

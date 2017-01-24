@@ -3,17 +3,18 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Archives: 2015/11 | 3h_william</title>
+  <title>项目中，使用akka的一些经验和总结 | 3h_william</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="技术/产品博客">
-<meta property="og:type" content="website">
-<meta property="og:title" content="3h_william">
-<meta property="og:url" content="http://yoursite.com/archives/2015/11/index.html">
+  <meta name="description" content="背景Akka 是scala中，应该说不仅仅是scala，整个jvm语言领域，较为优秀的并发框架。 但是，由于国内使用的同僚少之又少，所以相关的资料较少。大部分的资料和经验来自于 官网， akka.io ，还有一些奇奇乖乖的问题通过stackoverflow得意解决，最后，是在是解决不了的问题，需要多尝试，debug，等解决。总之，最终不论是多少坑也好，多少弯路也好，算是把akka用了起来，构建了一">
+<meta property="og:type" content="article">
+<meta property="og:title" content="项目中，使用akka的一些经验和总结">
+<meta property="og:url" content="http://yoursite.com/2017/01/24/akka/index.html">
 <meta property="og:site_name" content="3h_william">
-<meta property="og:description" content="技术/产品博客">
+<meta property="og:description" content="背景Akka 是scala中，应该说不仅仅是scala，整个jvm语言领域，较为优秀的并发框架。 但是，由于国内使用的同僚少之又少，所以相关的资料较少。大部分的资料和经验来自于 官网， akka.io ，还有一些奇奇乖乖的问题通过stackoverflow得意解决，最后，是在是解决不了的问题，需要多尝试，debug，等解决。总之，最终不论是多少坑也好，多少弯路也好，算是把akka用了起来，构建了一">
+<meta property="og:updated_time" content="2017-01-24T07:10:18.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="3h_william">
-<meta name="twitter:description" content="技术/产品博客">
+<meta name="twitter:title" content="项目中，使用akka的一些经验和总结">
+<meta name="twitter:description" content="背景Akka 是scala中，应该说不仅仅是scala，整个jvm语言领域，较为优秀的并发框架。 但是，由于国内使用的同僚少之又少，所以相关的资料较少。大部分的资料和经验来自于 官网， akka.io ，还有一些奇奇乖乖的问题通过stackoverflow得意解决，最后，是在是解决不了的问题，需要多尝试，debug，等解决。总之，最终不论是多少坑也好，多少弯路也好，算是把akka用了起来，构建了一">
   
     <link rel="alternate" href="/atom.xml" title="3h_william" type="application/atom+xml">
   
@@ -66,39 +67,73 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2015" class="archive-year">2015</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2015/11/10/zookeeper_stuck_dns_network/" class="archive-article-date">
-  <time datetime="2015-11-10T01:18:11.000Z" itemprop="datePublished">Nov 10</time>
+        <section id="main"><article id="post-akka" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/01/24/akka/" class="article-date">
+  <time datetime="2017-01-24T07:00:11.000Z" itemprop="datePublished">2017-01-24</time>
 </a>
-      
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/11/10/zookeeper_stuck_dns_network/">使用Zookeeper过程中遇到客户端stuck的问题和解决建议</a>
+    <h1 class="article-title" itemprop="name">
+      项目中，使用akka的一些经验和总结
     </h1>
   
 
-    </header>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>Akka 是scala中，应该说不仅仅是scala，整个jvm语言领域，较为优秀的并发框架。 但是，由于国内使用的同僚少之又少，所以相关的资料较少。<br>大部分的资料和经验来自于 官网， <a href="http://akka.io/" target="_blank" rel="external">akka.io</a> ，还有一些奇奇乖乖的问题通过stackoverflow得意解决，最后，是在是解决不了的问题，需要多尝试，debug，等解决。<br>总之，最终不论是多少坑也好，多少弯路也好，算是把akka用了起来，构建了一个以akka为分布式集群核心的任务调度集群。每天的 job数量在 3000+，系统也是相对稳定，深感欣慰。 </p>
+<h1 id="一些关键点"><a href="#一些关键点" class="headerlink" title="一些关键点"></a>一些关键点</h1><ol>
+<li>Akka的Cluster，路由发现目前测试是有点问题的，路由的配置个人感觉也是有点繁琐，而且中间环节控制的不够好，所以不推荐使用。</li>
+<li>在定义 Actor的时候，因为构建一个 Actor的时候，和初始化对象是不一样的。 所以如果再初始化 actor中发生异常，是无法在代码中捕获，只能通过parent的message来捕获<br>可以参考   <a href="http://stackoverflow.com/questions/18648390/how-should-an-akka-actor-be-created-that-might-throw-an-exception" target="_blank" rel="external">question</a><br>比较好的方式是，尽量保证在 初始化 Actor的时候， 减少异常发生的可能性(对数据库的操作)等。 </li>
+<li>Actor中对于 Future的使用，取决于并发和串行。 该并发的时候用 Future，不该用的时候，就串行。 因为和 Java的线程模型的抽象程度不一样，所有不要用Java中的线程思维理解Akka中Message和Actor</li>
+<li>在机器负载很大的情况下， Akka的Message发送和接受延迟是回很大的，所以尽可能控制好机器的负载。</li>
+<li>Akka的失败机制。在任何一个 Actor中发生异常，如何处理，默认情况是交给 Parent的supervisor，但是策略也有多种，根据具体使用场景，可以自定义。</li>
+</ol>
+<hr>
+<p>作者：3h-william<br>联系: <a href="https://github.com/3h-william" target="_blank" rel="external">https://github.com/3h-william</a><br>出处：<a href="http://3h-william.github.io" target="_blank" rel="external">http://3h-william.github.io</a>  </p>
+<hr>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/01/24/akka/" data-id="ciyb7plcu0000pn09si332dmv" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/akka/">akka</a></li></ul>
+
+    </footer>
   </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/01/24/lft/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          新一代分布式调度系统--雷峰塔架构
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2015/11/10/zookeeper_stuck_dns_network/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">使用Zookeeper过程中遇到客户端stuck的问题和解决建议</div>
+    </a>
+  
+</nav>
+
+  
 </article>
-  
-  
-    </div></section>
-  
 
 </section>
         
