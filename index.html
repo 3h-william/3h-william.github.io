@@ -148,7 +148,7 @@ Scala 主要应用于服务底层
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/01/24/lft/" data-id="ciyb7pldq000fpn0946ueh7mj" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/01/24/lft/" data-id="ciytwyfl2000bwb09w52zbngb" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/akka/">akka</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/scala/">scala</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/技术产品/">技术产品</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/技术架构/">技术架构</a></li></ul>
@@ -187,17 +187,18 @@ Scala 主要应用于服务底层
 <li>Akka的Cluster，路由发现目前测试是有点问题的，路由的配置个人感觉也是有点繁琐，而且中间环节控制的不够好，所以不推荐使用。</li>
 <li>在定义 Actor的时候，因为构建一个 Actor的时候，和初始化对象是不一样的。 所以如果再初始化 actor中发生异常，是无法在代码中捕获，只能通过parent的message来捕获<br>可以参考   <a href="http://stackoverflow.com/questions/18648390/how-should-an-akka-actor-be-created-that-might-throw-an-exception" target="_blank" rel="external">question</a><br>比较好的方式是，尽量保证在 初始化 Actor的时候， 减少异常发生的可能性(对数据库的操作)等。 </li>
 <li>Actor中对于 Future的使用，取决于并发和串行。 该并发的时候用 Future，不该用的时候，就串行。 因为和 Java的线程模型的抽象程度不一样，所有不要用Java中的线程思维理解Akka中Message和Actor</li>
-<li>在机器负载很大的情况下， Akka的Message发送和接受延迟是回很大的，所以尽可能控制好机器的负载。</li>
-<li>Akka的失败机制。在任何一个 Actor中发生异常，如何处理，默认情况是交给 Parent的supervisor，但是策略也有多种，根据具体使用场景，可以自定义。</li>
-</ol>
+<li>Akka的失败机制。在任何一个 Actor中发生异常，如何处理，默认情况是交给 Parent的supervisor，但是策略也有多种，根据具体使用场景，可以自定义。 </li>
+<li><p>最后，也是一个关键点， akka模型中，尽量不要在Actor中，使用  Thread.sleep或是其他的同步的高延迟操作。模型对很多地方做了封装，对于线程池来说，”窃取”是轻量级提高效率的最好方式，然而，一旦使用了Thread.sleep，就Hold了整个线程，是对模型来说一种破坏。 </p>
 <hr>
+</li>
+</ol>
 <p>作者：3h-william<br>联系: <a href="https://github.com/3h-william" target="_blank" rel="external">https://github.com/3h-william</a><br>出处：<a href="http://3h-william.github.io" target="_blank" rel="external">http://3h-william.github.io</a>  </p>
 <hr>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/01/24/akka/" data-id="ciyb7plcu0000pn09si332dmv" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/01/24/akka/" data-id="ciytwyfke0000wb09nlngjkc3" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/akka/">akka</a></li></ul>
@@ -249,7 +250,7 @@ Scala 主要应用于服务底层
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/11/10/zookeeper_stuck_dns_network/" data-id="ciyb7pldk000bpn09tic4992n" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/11/10/zookeeper_stuck_dns_network/" data-id="ciytwyfl5000fwb094y3npcys" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/zookeeper/">zookeeper</a></li></ul>
@@ -336,7 +337,7 @@ Scala 主要应用于服务底层
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/10/05/als_report/" data-id="ciyb7pld30003pn09dxit3b6u" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/10/05/als_report/" data-id="ciytwyfkj0001wb09pkzgum0m" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MachineLearning/">MachineLearning</a></li></ul>
@@ -382,7 +383,7 @@ Scala 主要应用于服务底层
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/09/11/sqoop_orc/" data-id="ciyb7pldh0009pn09u1tdf2qm" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/09/11/sqoop_orc/" data-id="ciytwyfl3000dwb09axklk24r" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hive/">hive</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sqoop/">sqoop</a></li></ul>
@@ -464,7 +465,7 @@ Scala 主要应用于服务底层
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/09/08/hbase_balance_problem/" data-id="ciyb7plcy0001pn09gx2dbc1h" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/09/08/hbase_balance_problem/" data-id="ciytwyfkv0005wb09n6b20wji" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hbase/">hbase</a></li></ul>
@@ -535,7 +536,7 @@ c)  加载。
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/08/27/hbase-bulkload/" data-id="ciyb7pldd0005pn0968dkgs37" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/08/27/hbase-bulkload/" data-id="ciytwyfks0004wb098khekmck" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hbase/">hbase</a></li></ul>
@@ -594,7 +595,7 @@ c)  加载。
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/08/10/elasticsearch_dc/" data-id="ciyb7pld50004pn098alh01nv" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/08/10/elasticsearch_dc/" data-id="ciytwyfkq0003wb09ici352ye" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/elasticsearch/">elasticsearch</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/search/">search</a></li></ul>
@@ -642,7 +643,7 @@ c)  加载。
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/06/07/hbase_tsdb_issue/" data-id="ciyb7pldf0008pn0956lgq5bw" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/06/07/hbase_tsdb_issue/" data-id="ciytwyfkw0008wb09b95pr06e" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hbase/">hbase</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tsdb/">tsdb</a></li></ul>
@@ -681,7 +682,7 @@ c)  加载。
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/06/01/hello-world/" data-id="ciyb7pldm000dpn098kefgxbk" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/06/01/hello-world/" data-id="ciytwyfkz0009wb09sbv1hj5u" class="article-share-link">Share</a>
       
       
     </footer>

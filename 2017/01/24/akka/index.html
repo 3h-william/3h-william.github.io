@@ -11,7 +11,7 @@
 <meta property="og:url" content="http://yoursite.com/2017/01/24/akka/index.html">
 <meta property="og:site_name" content="3h_william">
 <meta property="og:description" content="背景Akka 是scala中，应该说不仅仅是scala，整个jvm语言领域，较为优秀的并发框架。 但是，由于国内使用的同僚少之又少，所以相关的资料较少。大部分的资料和经验来自于 官网， akka.io ，还有一些奇奇乖乖的问题通过stackoverflow得意解决，最后，是在是解决不了的问题，需要多尝试，debug，等解决。总之，最终不论是多少坑也好，多少弯路也好，算是把akka用了起来，构建了一">
-<meta property="og:updated_time" content="2017-01-24T07:10:18.000Z">
+<meta property="og:updated_time" content="2017-02-06T09:46:01.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="项目中，使用akka的一些经验和总结">
 <meta name="twitter:description" content="背景Akka 是scala中，应该说不仅仅是scala，整个jvm语言领域，较为优秀的并发框架。 但是，由于国内使用的同僚少之又少，所以相关的资料较少。大部分的资料和经验来自于 官网， akka.io ，还有一些奇奇乖乖的问题通过stackoverflow得意解决，最后，是在是解决不了的问题，需要多尝试，debug，等解决。总之，最终不论是多少坑也好，多少弯路也好，算是把akka用了起来，构建了一">
@@ -94,17 +94,18 @@
 <li>Akka的Cluster，路由发现目前测试是有点问题的，路由的配置个人感觉也是有点繁琐，而且中间环节控制的不够好，所以不推荐使用。</li>
 <li>在定义 Actor的时候，因为构建一个 Actor的时候，和初始化对象是不一样的。 所以如果再初始化 actor中发生异常，是无法在代码中捕获，只能通过parent的message来捕获<br>可以参考   <a href="http://stackoverflow.com/questions/18648390/how-should-an-akka-actor-be-created-that-might-throw-an-exception" target="_blank" rel="external">question</a><br>比较好的方式是，尽量保证在 初始化 Actor的时候， 减少异常发生的可能性(对数据库的操作)等。 </li>
 <li>Actor中对于 Future的使用，取决于并发和串行。 该并发的时候用 Future，不该用的时候，就串行。 因为和 Java的线程模型的抽象程度不一样，所有不要用Java中的线程思维理解Akka中Message和Actor</li>
-<li>在机器负载很大的情况下， Akka的Message发送和接受延迟是回很大的，所以尽可能控制好机器的负载。</li>
-<li>Akka的失败机制。在任何一个 Actor中发生异常，如何处理，默认情况是交给 Parent的supervisor，但是策略也有多种，根据具体使用场景，可以自定义。</li>
-</ol>
+<li>Akka的失败机制。在任何一个 Actor中发生异常，如何处理，默认情况是交给 Parent的supervisor，但是策略也有多种，根据具体使用场景，可以自定义。 </li>
+<li><p>最后，也是一个关键点， akka模型中，尽量不要在Actor中，使用  Thread.sleep或是其他的同步的高延迟操作。模型对很多地方做了封装，对于线程池来说，”窃取”是轻量级提高效率的最好方式，然而，一旦使用了Thread.sleep，就Hold了整个线程，是对模型来说一种破坏。 </p>
 <hr>
+</li>
+</ol>
 <p>作者：3h-william<br>联系: <a href="https://github.com/3h-william" target="_blank" rel="external">https://github.com/3h-william</a><br>出处：<a href="http://3h-william.github.io" target="_blank" rel="external">http://3h-william.github.io</a>  </p>
 <hr>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/01/24/akka/" data-id="ciyb7plcu0000pn09si332dmv" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/01/24/akka/" data-id="ciytwyfke0000wb09nlngjkc3" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/akka/">akka</a></li></ul>
