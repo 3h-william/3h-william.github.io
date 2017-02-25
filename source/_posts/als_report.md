@@ -202,7 +202,7 @@ http://www.slideshare.net/sscdotopen/latent-factor-models-for-collaborative-filt
 
 ---
 
-作者：3h-william  
+作者：3h_william  
 联系: https://github.com/3h-william  
 出处：http://3h-william.github.io  
 

@@ -51,7 +51,7 @@ zookeeper 3.5以下的版本，会在客户端并发链接的时候，有一定�
 
 ---
 
-作者：3h-william  
+作者：3h_william  
 联系: https://github.com/3h-william  
 出处：http://3h-william.github.io  
 

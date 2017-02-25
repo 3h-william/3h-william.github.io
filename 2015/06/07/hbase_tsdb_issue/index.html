@@ -1,102 +1,228 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  
-  <title>Open Tsdb 引起 HBase的严重问题 | 3h_william</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="背景前一段时间，内部用到TSDB，发现经常引起HBase服务挂掉。最终，我这里经过一些排查，找到了问题。并且，我们已经向社区提出了这个问题。在这里，以此记录解决过程。  
+    <meta charset="utf-8">
+    
+    <title>Open Tsdb 引起 HBase的严重问题 | 3h_william</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="背景前一段时间，内部用到TSDB，发现经常引起HBase服务挂掉。最终，我这里经过一些排查，找到了问题。并且，我们已经向社区提出了这个问题。在这里，以此记录解决过程。  
 一. 根本原因:因为TSDB的合并导致单条记录的column非常大。一旦大于MAX_CHUNK_SIZE_KEY = “hfile.index.block.max.size”(默认128K);  就由一定几率使得Memstore">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Open Tsdb 引起 HBase的严重问题">
-<meta property="og:url" content="http://yoursite.com/2015/06/07/hbase_tsdb_issue/index.html">
+<meta property="og:url" content="http://3h-william.github.io/2015/06/07/hbase_tsdb_issue/index.html">
 <meta property="og:site_name" content="3h_william">
 <meta property="og:description" content="背景前一段时间，内部用到TSDB，发现经常引起HBase服务挂掉。最终，我这里经过一些排查，找到了问题。并且，我们已经向社区提出了这个问题。在这里，以此记录解决过程。  
 一. 根本原因:因为TSDB的合并导致单条记录的column非常大。一旦大于MAX_CHUNK_SIZE_KEY = “hfile.index.block.max.size”(默认128K);  就由一定几率使得Memstore">
-<meta property="og:image" content="http://yoursite.com/img/tsdb_hbase_issue/1.jpg">
-<meta property="og:image" content="http://yoursite.com/img/tsdb_hbase_issue/2.jpg">
-<meta property="og:image" content="http://yoursite.com/img/tsdb_hbase_issue/3.jpg">
-<meta property="og:updated_time" content="2017-01-24T06:49:38.000Z">
+<meta property="og:image" content="http://3h-william.github.io/img/tsdb_hbase_issue/1.jpg">
+<meta property="og:image" content="http://3h-william.github.io/img/tsdb_hbase_issue/2.jpg">
+<meta property="og:image" content="http://3h-william.github.io/img/tsdb_hbase_issue/3.jpg">
+<meta property="og:updated_time" content="2017-02-25T09:44:34.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Open Tsdb 引起 HBase的严重问题">
 <meta name="twitter:description" content="背景前一段时间，内部用到TSDB，发现经常引起HBase服务挂掉。最终，我这里经过一些排查，找到了问题。并且，我们已经向社区提出了这个问题。在这里，以此记录解决过程。  
 一. 根本原因:因为TSDB的合并导致单条记录的column非常大。一旦大于MAX_CHUNK_SIZE_KEY = “hfile.index.block.max.size”(默认128K);  就由一定几率使得Memstore">
-<meta name="twitter:image" content="http://yoursite.com/img/tsdb_hbase_issue/1.jpg">
-  
-    <link rel="alternate" href="/atom.xml" title="3h_william" type="application/atom+xml">
-  
-  
-    <link rel="icon" href="/favicon.png">
-  
-  
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
-  
-  <link rel="stylesheet" href="/css/style.css">
-  
+<meta name="twitter:image" content="http://3h-william.github.io/img/tsdb_hbase_issue/1.jpg">
+    
+
+    
+
+    
+
+    <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/libs/open-sans/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/libs/jquery/2.1.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+        <link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+    
+    
+    
+    
+
 
 </head>
 
 <body>
-  <div id="container">
-    <div id="wrap">
-      <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">3h_william</a>
-      </h1>
-      
-        <h2 id="subtitle-wrap">
-          <a href="/" id="subtitle">Hello Sunshine</a>
-        </h2>
-      
-    </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"></a>
-        
-          <a class="main-nav-link" href="/">Home</a>
-        
-          <a class="main-nav-link" href="/archives">Archives</a>
-        
-      </nav>
-      <nav id="sub-nav">
-        
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
-        
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
-      </div>
-    </div>
-  </div>
-</header>
-      <div class="outer">
-        <section id="main"><article id="post-hbase_tsdb_issue" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/06/07/hbase_tsdb_issue/" class="article-date">
-  <time datetime="2015-06-07T01:08:11.000Z" itemprop="datePublished">2015-06-07</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      Open Tsdb 引起 HBase的严重问题
-    </h1>
-  
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">3h_william</span>
+            </a>
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/.">Home</a>
+                
+                    <a class="main-nav-link" href="/archives">Archives</a>
+                
+            </nav>
+            
+                
+                <nav id="sub-nav">
+                    <div class="profile" id="profile-nav">
+                        <a id="profile-anchor" href="javascript:;">
+                            <img class="avatar" src="/css/images/me.jpg" />
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                    </div>
+                </nav>
+            
+            <div id="search-form-wrap">
 
-      </header>
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/.">Home</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">Archives</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+                
+
+<aside id="profile">
+    <div class="inner profile-inner">
+        <div class="base-info profile-block">
+            <img id="avatar" src="/css/images/me.jpg" />
+            <h2 id="name">3h_william</h2>
+            <h3 id="title">Bigdata Team Manager Architect</h3>
+            <span id="location"><i class="fa fa-map-marker"></i>Shanghai, China</span>
+            <a id="follow" target="_blank" href="http://www.weibo.com/3hwilliam">FOLLOW</a>
+        </div>
+        <div class="article-info profile-block">
+            <div class="article-info-block">
+                11
+                <span>posts</span>
+            </div>
+            <div class="article-info-block">
+                13
+                <span>tags</span>
+            </div>
+        </div>
+        
+        <div class="profile-block social-links">
+            <table>
+                <tr>
+                    
+                    
+                    <td>
+                        <a href="/3h-william" target="_blank" title="github" class=tooltip>
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="http://www.weibo.com/3hwilliam" target="_blank" title="weibo" class=tooltip>
+                            <i class="fa fa-weibo"></i>
+                        </a>
+                    </td>
+                    
+                </tr>
+            </table>
+        </div>
+        
+    </div>
+</aside>
+
+            
+            <section id="main"><article id="post-hbase_tsdb_issue" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
     
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>前一段时间，内部用到TSDB，发现经常引起HBase服务挂掉。最终，我这里经过一些排查，找到了问题。<br>并且，我们已经向社区提出了这个问题。在这里，以此记录解决过程。  </p>
+        <h1 class="article-title" itemprop="name">
+            Open Tsdb 引起 HBase的严重问题
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2015/06/07/hbase_tsdb_issue/">
+            <time datetime="2015-06-07T01:08:11.000Z" itemprop="datePublished">2015-06-07</time>
+        </a>
+    </div>
+
+
+                        
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/hbase/">hbase</a>, <a class="tag-link" href="/tags/tsdb/">tsdb</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>前一段时间，内部用到TSDB，发现经常引起HBase服务挂掉。最终，我这里经过一些排查，找到了问题。<br>并且，我们已经向社区提出了这个问题。在这里，以此记录解决过程。  </p>
 <h1 id="一-根本原因"><a href="#一-根本原因" class="headerlink" title="一. 根本原因:"></a>一. 根本原因:</h1><p>因为TSDB的合并导致单条记录的column非常大。一旦大于MAX_CHUNK_SIZE_KEY = “hfile.index.block.max.size”(默认128K);  就由一定几率使得Memstore  Flush无限进行。<br>并且本地已经模拟出该场景。我插入了一条Column非常大的记录(150K) ，然后调用flush， RS进入死循环，HDFS文件不断增大.</p>
 <p><img src="/img/tsdb_hbase_issue/1.jpg" alt=""></p>
 <h1 id="二-大致分析流程如下"><a href="#二-大致分析流程如下" class="headerlink" title="二. 大致分析流程如下"></a>二. 大致分析流程如下</h1><p>1.今天再次走代码流程和日志记录，纠正了昨天判断是HBase Compaction触发导致的问题。(出问题的那个点，并没有进行HBase层面的Compact)<br>2.进一步确认，是因为HBase的Memstore Flush成HFile导致。 （Hfile也是存在于Region/.tmp中,在一个时间点,HBase都做了一次flush<br>3.随后定位到，问题出在了Flush Memstore的时候，需要生产HFile V2 下的BlockData Index, 并导致写索引的死循环。  </p>
@@ -104,141 +230,319 @@
 <h1 id="三-社区反映"><a href="#三-社区反映" class="headerlink" title="三. 社区反映"></a>三. 社区反映</h1><p><a href="https://issues.apache.org/jira/browse/HBASE-12320" target="_blank" rel="external">https://issues.apache.org/jira/browse/HBASE-12320</a><br>这是去年在JIRA 上提出的 ISSUE，但一直都没有得到解决。虽然已经有人意识到了问题。<br>事实上，不论是ColumnName的大小，或是Rowkey的大小，或是Faimily的大小，一旦超过这个阀值，就会出问题。<br>同时，只是建议，HBase的单个KV的大小，不超过128K。   </p>
 <h1 id="四-解决方案"><a href="#四-解决方案" class="headerlink" title="四. 解决方案"></a>四. 解决方案</h1><p>注意TSDB的推送的数据，不要分的太小。或者，关闭compaction(TSDB层面)  </p>
 <hr>
-<p>作者：3h-william<br>联系: <a href="https://github.com/3h-william" target="_blank" rel="external">https://github.com/3h-william</a><br>出处：<a href="http://3h-william.github.io" target="_blank" rel="external">http://3h-william.github.io</a>  </p>
+<p>作者：3h_william<br>联系: <a href="https://github.com/3h-william" target="_blank" rel="external">https://github.com/3h-william</a><br>出处：<a href="http://3h-william.github.io">http://3h-william.github.io</a>  </p>
 <hr>
 
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/06/07/hbase_tsdb_issue/" data-id="ciytwyfkw0008wb09b95pr06e" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hbase/">hbase</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tsdb/">tsdb</a></li></ul>
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
 
-    </footer>
-  </div>
-  
+
+
+</div>
+
+    <a data-url="http://3h-william.github.io/2015/06/07/hbase_tsdb_issue/" data-id="cizl54bwc00089c09omcgy5py" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+<script>
+    (function ($) {
+        // Prevent duplicate binding
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+            
     
+        <a href="http://3h-william.github.io/2015/06/07/hbase_tsdb_issue/#comments" class="article-comment-link">Comments</a>
+    
+
+        </footer>
+    </div>
+    
+        
 <nav id="article-nav">
-  
-    <a href="/2015/08/10/elasticsearch_dc/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          为ElasticSearch 添加支持跨DC的特性
-        
-      </div>
-    </a>
-  
-  
-    <a href="/2015/06/01/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">Hello World , Hello PPG , Hello Sunshine</div>
-    </a>
-  
+    
+        <a href="/2015/08/10/elasticsearch_dc/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">Newer</strong>
+            <div class="article-nav-title">
+                
+                    为ElasticSearch 添加支持跨DC的特性
+                
+            </div>
+        </a>
+    
+    
+        <a href="/2015/06/01/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">Older</strong>
+            <div class="article-nav-title">Hello World , Hello PPG , Hello Sunshine</div>
+        </a>
+    
 </nav>
 
-  
+
+    
 </article>
 
+
+    
+    <section id="comments">
+    
+        
+    <div id="uyan_frame"></div>
+
+    
+    </section>
+
 </section>
+            
+                <aside id="sidebar">
+   
         
-          <aside id="sidebar">
-  
+    <div class="widget-wrap">
+        <h3 class="widget-title">recent</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/02/25/akka_split_brain/" class="thumbnail">
     
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
 
-  
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"></p>
+                            <p class="item-title"><a href="/2017/02/25/akka_split_brain/" class="title">Akka集群对于脑裂的策略</a></p>
+                            <p class="item-date"><time datetime="2017-02-25T09:35:00.000Z" itemprop="datePublished">2017-02-25</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/01/24/lft/" class="thumbnail">
     
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tags</h3>
-    <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/MachineLearning/">MachineLearning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/akka/">akka</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/elasticsearch/">elasticsearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hbase/">hbase</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hive/">hive</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scala/">scala</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/search/">search</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sqoop/">sqoop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tsdb/">tsdb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zookeeper/">zookeeper</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/技术产品/">技术产品</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/技术架构/">技术架构</a></li></ul>
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"></p>
+                            <p class="item-title"><a href="/2017/01/24/lft/" class="title">新一代分布式调度系统--雷峰塔架构</a></p>
+                            <p class="item-date"><time datetime="2017-01-24T07:30:11.000Z" itemprop="datePublished">2017-01-24</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/01/24/akka/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"></p>
+                            <p class="item-title"><a href="/2017/01/24/akka/" class="title">项目中，使用akka的一些经验和总结</a></p>
+                            <p class="item-date"><time datetime="2017-01-24T07:00:11.000Z" itemprop="datePublished">2017-01-24</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2015/11/10/zookeeper_stuck_dns_network/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"></p>
+                            <p class="item-title"><a href="/2015/11/10/zookeeper_stuck_dns_network/" class="title">使用Zookeeper过程中遇到客户端stuck的问题和解决建议</a></p>
+                            <p class="item-date"><time datetime="2015-11-10T01:18:11.000Z" itemprop="datePublished">2015-11-10</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2015/10/05/als_report/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"></p>
+                            <p class="item-title"><a href="/2015/10/05/als_report/" class="title">推荐算法与协同过滤</a></p>
+                            <p class="item-date"><time datetime="2015-10-05T06:08:11.000Z" itemprop="datePublished">2015-10-05</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
     </div>
-  </div>
 
-
-  
     
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tag Cloud</h3>
-    <div class="widget tagcloud">
-      <a href="/tags/MachineLearning/" style="font-size: 10px;">MachineLearning</a> <a href="/tags/akka/" style="font-size: 15px;">akka</a> <a href="/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/tags/hbase/" style="font-size: 20px;">hbase</a> <a href="/tags/hive/" style="font-size: 10px;">hive</a> <a href="/tags/scala/" style="font-size: 10px;">scala</a> <a href="/tags/search/" style="font-size: 10px;">search</a> <a href="/tags/sqoop/" style="font-size: 10px;">sqoop</a> <a href="/tags/tsdb/" style="font-size: 10px;">tsdb</a> <a href="/tags/zookeeper/" style="font-size: 10px;">zookeeper</a> <a href="/tags/技术产品/" style="font-size: 10px;">技术产品</a> <a href="/tags/技术架构/" style="font-size: 10px;">技术架构</a>
-    </div>
-  </div>
-
-  
+        
     
-  <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a></li></ul>
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">archives</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a><span class="archive-list-count">2</span></li></ul>
+        </div>
     </div>
-  </div>
 
-
-  
     
-  <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
-    <div class="widget">
-      <ul>
         
-          <li>
-            <a href="/2017/01/24/lft/">新一代分布式调度系统--雷峰塔架构</a>
-          </li>
-        
-          <li>
-            <a href="/2017/01/24/akka/">项目中，使用akka的一些经验和总结</a>
-          </li>
-        
-          <li>
-            <a href="/2015/11/10/zookeeper_stuck_dns_network/">使用Zookeeper过程中遇到客户端stuck的问题和解决建议</a>
-          </li>
-        
-          <li>
-            <a href="/2015/10/05/als_report/">推荐算法与协同过滤</a>
-          </li>
-        
-          <li>
-            <a href="/2015/09/11/sqoop_orc/">使用sqoop生成ORC格式的文件，并给Hive加载</a>
-          </li>
-        
-      </ul>
+    <div class="widget-wrap">
+        <h3 class="widget-title">tags</h3>
+        <div class="widget">
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/MachineLearning/">MachineLearning</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/akka/">akka</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/elasticsearch/">elasticsearch</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hbase/">hbase</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hive/">hive</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scala/">scala</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/search/">search</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sqoop/">sqoop</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tsdb/">tsdb</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zookeeper/">zookeeper</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分布式系统/">分布式系统</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/技术产品/">技术产品</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/技术架构/">技术架构</a><span class="tag-list-count">1</span></li></ul>
+        </div>
     </div>
-  </div>
 
-  
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">tag cloud</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/MachineLearning/" style="font-size: 10px;">MachineLearning</a> <a href="/tags/akka/" style="font-size: 20px;">akka</a> <a href="/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/tags/hbase/" style="font-size: 20px;">hbase</a> <a href="/tags/hive/" style="font-size: 10px;">hive</a> <a href="/tags/scala/" style="font-size: 10px;">scala</a> <a href="/tags/search/" style="font-size: 10px;">search</a> <a href="/tags/sqoop/" style="font-size: 10px;">sqoop</a> <a href="/tags/tsdb/" style="font-size: 10px;">tsdb</a> <a href="/tags/zookeeper/" style="font-size: 10px;">zookeeper</a> <a href="/tags/分布式系统/" style="font-size: 10px;">分布式系统</a> <a href="/tags/技术产品/" style="font-size: 10px;">技术产品</a> <a href="/tags/技术架构/" style="font-size: 10px;">技术架构</a>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">links</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="http://hexo.io">Hexo</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
 </aside>
-        
-      </div>
-      <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      &copy; 2017 3h.william@gmail.com<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+            
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2017 3h.william@gmail.com<br>
+            Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>
+        </div>
     </div>
-  </div>
 </footer>
-    </div>
-    <nav id="mobile-nav">
-  
-    <a href="/" class="mobile-nav-link">Home</a>
-  
-    <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-</nav>
+        
+    
+    <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2126168"></script>
+
+
+
+    
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+        <script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
     
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 
 
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
 
-
-<script src="/js/script.js"></script>
-
-  </div>
+    </div>
 </body>
 </html>

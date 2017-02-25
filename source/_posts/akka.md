@@ -16,13 +16,12 @@ Akka 是scala中，应该说不仅仅是scala，整个jvm语言领域，较为�
       可以参考   [question](http://stackoverflow.com/questions/18648390/how-should-an-akka-actor-be-created-that-might-throw-an-exception)
       比较好的方式是，尽量保证在 初始化 Actor的时候， 减少异常发生的可能性(对数据库的操作)等。 
   3.  Actor中对于 Future的使用，取决于并发和串行。 该并发的时候用 Future，不该用的时候，就串行。 因为和 Java的线程模型的抽象程度不一样，所有不要用Java中的线程思维理解Akka中Message和Actor
-  4.  在机器负载很大的情况下， Akka的Message发送和接受延迟是回很大的，所以尽可能控制好机器的负载。
-  5.  Akka的失败机制。在任何一个 Actor中发生异常，如何处理，默认情况是交给 Parent的supervisor，但是策略也有多种，根据具体使用场景，可以自定义。
-
+  4.  Akka的失败机制。在任何一个 Actor中发生异常，如何处理，默认情况是交给 Parent的supervisor，但是策略也有多种，根据具体使用场景，可以自定义。 
+  5.  最后，也是一个关键点，理解actor线程的模型，并发和串行，以及scala的异步线程池等概念，是设计复杂系统的基础。
  
  ---
 
-作者：3h-william  
+作者：3h_william  
 联系: https://github.com/3h-william  
 出处：http://3h-william.github.io  
 

@@ -38,7 +38,7 @@ https://github.com/3h-william/elasticsearch-dc-version0.0.1
 
 ---
 
-作者：3h-william  
+作者：3h_william  
 联系: https://github.com/3h-william  
 出处：http://3h-william.github.io  
 

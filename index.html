@@ -1,96 +1,364 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  
-  <title>3h_william</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="技术/产品博客">
+    <meta charset="utf-8">
+    
+    <title>3h_william</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="技术/产品博客">
 <meta property="og:type" content="website">
 <meta property="og:title" content="3h_william">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta property="og:url" content="http://3h-william.github.io/index.html">
 <meta property="og:site_name" content="3h_william">
 <meta property="og:description" content="技术/产品博客">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="3h_william">
 <meta name="twitter:description" content="技术/产品博客">
-  
-    <link rel="alternate" href="/atom.xml" title="3h_william" type="application/atom+xml">
-  
-  
-    <link rel="icon" href="/favicon.png">
-  
-  
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
-  
-  <link rel="stylesheet" href="/css/style.css">
-  
+    
+
+    
+
+    
+
+    <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/libs/open-sans/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/libs/jquery/2.1.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+        <link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+    
+    
+    
+    
+
 
 </head>
 
 <body>
-  <div id="container">
-    <div id="wrap">
-      <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">3h_william</a>
-      </h1>
-      
-        <h2 id="subtitle-wrap">
-          <a href="/" id="subtitle">Hello Sunshine</a>
-        </h2>
-      
-    </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"></a>
-        
-          <a class="main-nav-link" href="/">Home</a>
-        
-          <a class="main-nav-link" href="/archives">Archives</a>
-        
-      </nav>
-      <nav id="sub-nav">
-        
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
-        
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
-      </div>
-    </div>
-  </div>
-</header>
-      <div class="outer">
-        <section id="main">
-  
-    <article id="post-lft" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/01/24/lft/" class="article-date">
-  <time datetime="2017-01-24T07:30:11.000Z" itemprop="datePublished">2017-01-24</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/01/24/lft/">新一代分布式调度系统--雷峰塔架构</a>
-    </h1>
-  
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">3h_william</span>
+            </a>
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/.">Home</a>
+                
+                    <a class="main-nav-link" href="/archives">Archives</a>
+                
+            </nav>
+            
+                
+                <nav id="sub-nav">
+                    <div class="profile" id="profile-nav">
+                        <a id="profile-anchor" href="javascript:;">
+                            <img class="avatar" src="/css/images/me.jpg" />
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                    </div>
+                </nav>
+            
+            <div id="search-form-wrap">
 
-      </header>
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="Type something..." />
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: 'Posts',
+            PAGES: 'Pages',
+            CATEGORIES: 'Categories',
+            TAGS: 'Tags',
+            UNTITLED: '(Untitled)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/.">Home</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">Archives</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="Search" />
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+                
+
+<aside id="profile">
+    <div class="inner profile-inner">
+        <div class="base-info profile-block">
+            <img id="avatar" src="/css/images/me.jpg" />
+            <h2 id="name">3h_william</h2>
+            <h3 id="title">Bigdata Team Manager Architect</h3>
+            <span id="location"><i class="fa fa-map-marker"></i>Shanghai, China</span>
+            <a id="follow" target="_blank" href="http://www.weibo.com/3hwilliam">FOLLOW</a>
+        </div>
+        <div class="article-info profile-block">
+            <div class="article-info-block">
+                11
+                <span>posts</span>
+            </div>
+            <div class="article-info-block">
+                13
+                <span>tags</span>
+            </div>
+        </div>
+        
+        <div class="profile-block social-links">
+            <table>
+                <tr>
+                    
+                    
+                    <td>
+                        <a href="/3h-william" target="_blank" title="github" class=tooltip>
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="http://www.weibo.com/3hwilliam" target="_blank" title="weibo" class=tooltip>
+                            <i class="fa fa-weibo"></i>
+                        </a>
+                    </td>
+                    
+                </tr>
+            </table>
+        </div>
+        
+    </div>
+</aside>
+
+            
+            <section id="main">
+    <article id="post-akka_split_brain" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
     
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>  分布式任务调度系统工具很多，有Oozie ,Azkaban, airflow… ,大多数，都只能满足部分的需求。对于一个成熟的企业来说，只能当做工具，<br>  不能称之为产品。 对于一些特殊的定制化的需求，是无法满足的。<br>  因此，我们决定自主开发一个任务调度系统，定义为新一代调度系统，吸收各类调度系统的优点，并加以细化，基于Hadoop，不局限于Hadoop，提供完整的工作模式和工作机制。</p>
+        <h1 itemprop="name">
+            <a class="article-title" href="/2017/02/25/akka_split_brain/">Akka集群对于脑裂的策略</a>
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2017/02/25/akka_split_brain/">
+            <time datetime="2017-02-25T09:35:00.000Z" itemprop="datePublished">2017-02-25</time>
+        </a>
+    </div>
+
+
+                        
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/akka/">akka</a>, <a class="tag-link" href="/tags/分布式系统/">分布式系统</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>一直以为，Akka的文档，是开源产品中写得较为优秀的，不但全面，而且有一定的深度。<br>在使用Akka Cluster的过程中，有几次关于脑裂的问题的发生，下面，就简单的介绍这篇文档:<br><a href="http://doc.akka.io/docs/akka/rp-16s01p01/scala/split-brain-resolver.html" target="_blank" rel="external">Split Brain Resolver</a></p>
+<h1 id="什么是脑裂"><a href="#什么是脑裂" class="headerlink" title="什么是脑裂"></a>什么是脑裂</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">A fundamental problem in distributed systems is that network partitions (split brain scenarios) and machine crashes are indistinguishable for the observer, </div><div class="line">i.e. a node can observe that there is a problem with another node, but it cannot tell if it has crashed and will never be available again or </div><div class="line">if there is a network issue that might or might not heal again after a while. Temporary and permanent failures are indistinguishable because decisions must be made in finite time, </div><div class="line">and there always exists a temporary failure that lasts longer than the time limit for the decision.</div></pre></td></tr></table></figure>
+<p>  简单的解释一下<br>  脑裂常常发身在网络故障的时候，把一个分布式的系统，分成了至少2个partitions。 并且这两个partitions不能识别出到底谁才是正常的，因为集群需要再一个有限的短时间内做出一个判断，而网络的故障的时间是不定。<br>  最终造成了整个集群处于一种不可用的状态。</p>
+<h1 id="策略"><a href="#策略" class="headerlink" title="策略"></a>策略</h1><p>  所有策略的前提是，集群处于一个稳定的(stable)状态。 也就是说，在这个时间点，已经发生了脑裂，但是，不会有反复 (back and force )节点的 up/down。<br>  基于这个前提，akka提供了一些策略，来应付脑裂的情况</p>
+<h2 id="1-Static-Quorum"><a href="#1-Static-Quorum" class="headerlink" title="1 Static Quorum"></a>1 Static Quorum</h2><p>  配置文件中，固定一个数值(static quorum) 当集群发生脑裂的时候，任何一个partition中的node &gt;= 过这个值，则认定是有效的。<br>  数值和集群有一关系  总节点数，必须小于 quorum-size * 2 - 1 ， 当然，也必须大于 quorum。</p>
+<p>  这个策略的有点是， 在任何脑裂发生的时候，当产生两个 partition的时候，效果是非常显著的， 因为必然会推举出一个 partition 有效。 另一个无效。<br>  他的缺点是 :<br>  a)  quorum的数值是静态配置的，如果集群动态增加node，这个值必须随之而调整。<br>  b） 如果partitions的数量超过2。 比如 10 Nodes，static quorum最小的值是6 ，如果发生脑裂时，将集群划分为3个partition，分别是  (3,3,4) ，那么任何partition都无法运作。</p>
+<p>  总的来说， Static Quorum相对简单粗放一些，可以应对大部分的异常，也有不少分布式系统使用的是这个策略， 比如 Elasticsearch。</p>
+<h2 id="2-Keep-Majority"><a href="#2-Keep-Majority" class="headerlink" title="2 Keep Majority"></a>2 Keep Majority</h2><p>  基本规则是保留整个 partition中，拥有majority nodes的partition。<br>  他和 static quorum相比的好处是， 如果整个 cluster 的nodes数量是动态调整的，那么majority也是一个动态的值，这样会避免 static quorum的问题。<br>  但此策略依旧不能避免的是，如果两个 partitions所拥有的node数量是相同的，那么，整个 cluster 将会被终止。</p>
+<p>  此外，akka提供了基于 keep majority，额外的一个配置项<br>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"> akka.cluster.split-brain-resolver.keep-majority &#123;</div><div class="line">  # if the &apos;role&apos; is defined the decision is based only on members with that &apos;role&apos;</div><div class="line">  role = &quot;&quot;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>  可以对于某些node定义他的价值，如果在多个partition中，拥有这些 valuable的节点数量较多的话，就会保留这个partition。<br>  这个选项对于一个多角色的集群，某些node是无状态的(stateless)的工作节点，他们相对而言价值较低，而某些节点可能是数据持久化节点，或者是Master节点。<br>  这样就可以区分出来多个Partition的价值，而保留价值高的部分。</p>
+<h2 id="3-Keep-Oldest"><a href="#3-Keep-Oldest" class="headerlink" title="3 Keep Oldest"></a>3 Keep Oldest</h2><p>  顾名思义，整个集群只保留一个拥有最老节点的partition<br>  当然，有一个特例是，如果某一个partition，只有这一个oldest node，则这个partition会关闭它自己。<br>  这个策略适用于一些 Singleton 的场景，即某些特殊的服务只存在于 oldest的节点上。</p>
+<h2 id="4-Keep-Referee"><a href="#4-Keep-Referee" class="headerlink" title="4 Keep Referee"></a>4 Keep Referee</h2><p>  这个策略和 Keepr oldest类似，只是把 oldest节点替换成了 referee节点，referee节点可以是cluster中的任意一台。</p>
+<h1 id="Stable"><a href="#Stable" class="headerlink" title="Stable"></a>Stable</h1><p>  最后，回顾一个前提，所有的策略都必须基于集群稳定的情况下，才做出决定。<br>  在Cluster Singleton 和  Cluster Sharding 的过程中，新的Instance必须等到老的instance关闭。<br>  为了减少集群同时存在两个instance的情况， 有一个 duration 来保持集群(脑裂)状态的稳定。<br>  以下是akka的文档给出的建议:</p>
+<p>  <img src="/img/akka_split_brain/p1.png" alt=""></p>
+<hr>
+<p>作者：3h_william<br>联系: <a href="https://github.com/3h-william" target="_blank" rel="external">https://github.com/3h-william</a><br>出处：<a href="http://3h-william.github.io">http://3h-william.github.io</a>  </p>
+<hr>
+
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+
+</div>
+
+    <a data-url="http://3h-william.github.io/2017/02/25/akka_split_brain/" data-id="cizl54bvu00009c09nikfj87n" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+<script>
+    (function ($) {
+        // Prevent duplicate binding
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+            
+    
+        <a href="http://3h-william.github.io/2017/02/25/akka_split_brain/#comments" class="article-comment-link">Comments</a>
+    
+
+        </footer>
+    </div>
+    
+</article>
+
+
+
+    <article id="post-lft" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 itemprop="name">
+            <a class="article-title" href="/2017/01/24/lft/">新一代分布式调度系统--雷峰塔架构</a>
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2017/01/24/lft/">
+            <time datetime="2017-01-24T07:30:11.000Z" itemprop="datePublished">2017-01-24</time>
+        </a>
+    </div>
+
+
+                        
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/akka/">akka</a>, <a class="tag-link" href="/tags/scala/">scala</a>, <a class="tag-link" href="/tags/技术产品/">技术产品</a>, <a class="tag-link" href="/tags/技术架构/">技术架构</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>  分布式任务调度系统工具很多，有Oozie ,Azkaban, airflow… ,大多数，都只能满足部分的需求。对于一个成熟的企业来说，只能当做工具，<br>  不能称之为产品。 对于一些特殊的定制化的需求，是无法满足的。<br>  因此，我们决定自主开发一个任务调度系统，定义为新一代调度系统，吸收各类调度系统的优点，并加以细化，基于Hadoop，不局限于Hadoop，提供完整的工作模式和工作机制。</p>
 <h1 id="什么是雷峰塔"><a href="#什么是雷峰塔" class="headerlink" title="什么是雷峰塔"></a>什么是雷峰塔</h1><p>雷峰塔是新一代分布式任务调度系统。 可以通过扩展任务类型来丰富调度系统，同时也可以自定义WebUI的部分插件功能。<br>其中WebUI的部分功能设计是参考了 Azkaban 的设计风格。</p>
 <h1 id="对比-Azkaban"><a href="#对比-Azkaban" class="headerlink" title="对比 Azkaban ?"></a>对比 Azkaban ?</h1><p>  更灵活的插件框架，满足更深的定制化需求。<br>  多个工作节点在不同机器上协同调度，可以通过自定义负载均衡来实现任务的分发。<br>  增加执行用户概念，一个执行器上可以用不同用户执行 Hadoop/Spark任务。</p>
 <h1 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h1><p>雷峰塔是一个分布式的任务调度系统。<br>其特点是 :<br> 便于部署<br> 插件灵活，扩展性感<br> Web UI 自定义</p>
@@ -142,97 +410,273 @@ Scala 主要应用于服务底层
 <li>one-manually :       指定任务在某一个节点执行</li>
 </ol>
 <hr>
-<p>作者：3h-william<br>联系: <a href="https://github.com/3h-william" target="_blank" rel="external">https://github.com/3h-william</a><br>出处：<a href="http://3h-william.github.io" target="_blank" rel="external">http://3h-william.github.io</a>  </p>
+<p>作者：3h_william<br>联系: <a href="https://github.com/3h-william" target="_blank" rel="external">https://github.com/3h-william</a><br>出处：<a href="http://3h-william.github.io">http://3h-william.github.io</a>  </p>
 <hr>
 
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/01/24/lft/" data-id="ciytwyfl2000bwb09w52zbngb" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/akka/">akka</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/scala/">scala</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/技术产品/">技术产品</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/技术架构/">技术架构</a></li></ul>
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
 
-    </footer>
-  </div>
-  
+
+
+</div>
+
+    <a data-url="http://3h-william.github.io/2017/01/24/lft/" data-id="cizl54bwi000c9c098u7dvkec" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+<script>
+    (function ($) {
+        // Prevent duplicate binding
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+            
+    
+        <a href="http://3h-william.github.io/2017/01/24/lft/#comments" class="article-comment-link">Comments</a>
+    
+
+        </footer>
+    </div>
+    
 </article>
 
 
-  
-    <article id="post-akka" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/01/24/akka/" class="article-date">
-  <time datetime="2017-01-24T07:00:11.000Z" itemprop="datePublished">2017-01-24</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/01/24/akka/">项目中，使用akka的一些经验和总结</a>
-    </h1>
-  
 
-      </header>
+    <article id="post-akka" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
     
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>Akka 是scala中，应该说不仅仅是scala，整个jvm语言领域，较为优秀的并发框架。 但是，由于国内使用的同僚少之又少，所以相关的资料较少。<br>大部分的资料和经验来自于 官网， <a href="http://akka.io/" target="_blank" rel="external">akka.io</a> ，还有一些奇奇乖乖的问题通过stackoverflow得意解决，最后，是在是解决不了的问题，需要多尝试，debug，等解决。<br>总之，最终不论是多少坑也好，多少弯路也好，算是把akka用了起来，构建了一个以akka为分布式集群核心的任务调度集群。每天的 job数量在 3000+，系统也是相对稳定，深感欣慰。 </p>
+        <h1 itemprop="name">
+            <a class="article-title" href="/2017/01/24/akka/">项目中，使用akka的一些经验和总结</a>
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2017/01/24/akka/">
+            <time datetime="2017-01-24T07:00:11.000Z" itemprop="datePublished">2017-01-24</time>
+        </a>
+    </div>
+
+
+                        
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/akka/">akka</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>Akka 是scala中，应该说不仅仅是scala，整个jvm语言领域，较为优秀的并发框架。 但是，由于国内使用的同僚少之又少，所以相关的资料较少。<br>大部分的资料和经验来自于 官网， <a href="http://akka.io/" target="_blank" rel="external">akka.io</a> ，还有一些奇奇乖乖的问题通过stackoverflow得意解决，最后，是在是解决不了的问题，需要多尝试，debug，等解决。<br>总之，最终不论是多少坑也好，多少弯路也好，算是把akka用了起来，构建了一个以akka为分布式集群核心的任务调度集群。每天的 job数量在 3000+，系统也是相对稳定，深感欣慰。 </p>
 <h1 id="一些关键点"><a href="#一些关键点" class="headerlink" title="一些关键点"></a>一些关键点</h1><ol>
 <li>Akka的Cluster，路由发现目前测试是有点问题的，路由的配置个人感觉也是有点繁琐，而且中间环节控制的不够好，所以不推荐使用。</li>
 <li>在定义 Actor的时候，因为构建一个 Actor的时候，和初始化对象是不一样的。 所以如果再初始化 actor中发生异常，是无法在代码中捕获，只能通过parent的message来捕获<br>可以参考   <a href="http://stackoverflow.com/questions/18648390/how-should-an-akka-actor-be-created-that-might-throw-an-exception" target="_blank" rel="external">question</a><br>比较好的方式是，尽量保证在 初始化 Actor的时候， 减少异常发生的可能性(对数据库的操作)等。 </li>
 <li>Actor中对于 Future的使用，取决于并发和串行。 该并发的时候用 Future，不该用的时候，就串行。 因为和 Java的线程模型的抽象程度不一样，所有不要用Java中的线程思维理解Akka中Message和Actor</li>
 <li>Akka的失败机制。在任何一个 Actor中发生异常，如何处理，默认情况是交给 Parent的supervisor，但是策略也有多种，根据具体使用场景，可以自定义。 </li>
-<li><p>最后，也是一个关键点， akka模型中，尽量不要在Actor中，使用  Thread.sleep或是其他的同步的高延迟操作。模型对很多地方做了封装，对于线程池来说，”窃取”是轻量级提高效率的最好方式，然而，一旦使用了Thread.sleep，就Hold了整个线程，是对模型来说一种破坏。 </p>
+<li><p>最后，也是一个关键点，理解actor线程的模型，并发和串行，以及scala的异步线程池等概念，是设计复杂系统的基础。</p>
 <hr>
 </li>
 </ol>
-<p>作者：3h-william<br>联系: <a href="https://github.com/3h-william" target="_blank" rel="external">https://github.com/3h-william</a><br>出处：<a href="http://3h-william.github.io" target="_blank" rel="external">http://3h-william.github.io</a>  </p>
+<p>作者：3h_william<br>联系: <a href="https://github.com/3h-william" target="_blank" rel="external">https://github.com/3h-william</a><br>出处：<a href="http://3h-william.github.io">http://3h-william.github.io</a>  </p>
 <hr>
 
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/01/24/akka/" data-id="ciytwyfke0000wb09nlngjkc3" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/akka/">akka</a></li></ul>
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
 
-    </footer>
-  </div>
-  
+
+
+</div>
+
+    <a data-url="http://3h-william.github.io/2017/01/24/akka/" data-id="cizl54bvy00019c092asz22in" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+<script>
+    (function ($) {
+        // Prevent duplicate binding
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+            
+    
+        <a href="http://3h-william.github.io/2017/01/24/akka/#comments" class="article-comment-link">Comments</a>
+    
+
+        </footer>
+    </div>
+    
 </article>
 
 
-  
-    <article id="post-zookeeper_stuck_dns_network" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/11/10/zookeeper_stuck_dns_network/" class="article-date">
-  <time datetime="2015-11-10T01:18:11.000Z" itemprop="datePublished">2015-11-10</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/11/10/zookeeper_stuck_dns_network/">使用Zookeeper过程中遇到客户端stuck的问题和解决建议</a>
-    </h1>
-  
 
-      </header>
+    <article id="post-zookeeper_stuck_dns_network" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
     
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>最近在查询一个和zookeeper相关的case。追查结果是一个称之为”Reverse DNS lookup”的问题。<br>可以称之为:反向DNS查找。 <a href="https://en.wikipedia.org/wiki/Reverse_DNS_lookup" target="_blank" rel="external">https://en.wikipedia.org/wiki/Reverse_DNS_lookup</a></p>
+        <h1 itemprop="name">
+            <a class="article-title" href="/2015/11/10/zookeeper_stuck_dns_network/">使用Zookeeper过程中遇到客户端stuck的问题和解决建议</a>
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2015/11/10/zookeeper_stuck_dns_network/">
+            <time datetime="2015-11-10T01:18:11.000Z" itemprop="datePublished">2015-11-10</time>
+        </a>
+    </div>
+
+
+                        
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/zookeeper/">zookeeper</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>最近在查询一个和zookeeper相关的case。追查结果是一个称之为”Reverse DNS lookup”的问题。<br>可以称之为:反向DNS查找。 <a href="https://en.wikipedia.org/wiki/Reverse_DNS_lookup" target="_blank" rel="external">https://en.wikipedia.org/wiki/Reverse_DNS_lookup</a></p>
 <h1 id="隐患"><a href="#隐患" class="headerlink" title="隐患"></a>隐患</h1><p>zookeeper 3.5以下的版本，会在客户端并发链接的时候，有一定几率发生stuck，随着并发连接的增多，发生概率越大。尤其是第一次创建连接的时候。<br>(因为zookeeper的client版本和server的版本兼容性，可以先升级客户端，客户端版本&gt;服务端版本，是支持的)</p>
 <p>原因:<br>1)   归根结底，是因为DNS解析的问题。 可参考:<br><a href="https://issues.apache.org/jira/browse/ZOOKEEPER-1666" target="_blank" rel="external">issue 1666</a>   </p>
 <p>2)   1666 issue在3.4.6已经fix，但是和它相关的另一个issue，只有在3.5才fix<br><a href="https://issues.apache.org/jira/browse/ZOOKEEPER-1891" target="_blank" rel="external">issue 1891</a>  </p>
@@ -244,47 +688,135 @@ Scala 主要应用于服务底层
 <li>当使用注释第二行的时候，是不会有这个问题。<br>而不凑巧对的是，zookeeper3.5以下的版本中，是存在第一行注释的代码的。因此，问题就产生了。  </li>
 </ul>
 <hr>
-<p>作者：3h-william<br>联系: <a href="https://github.com/3h-william" target="_blank" rel="external">https://github.com/3h-william</a><br>出处：<a href="http://3h-william.github.io" target="_blank" rel="external">http://3h-william.github.io</a>  </p>
+<p>作者：3h_william<br>联系: <a href="https://github.com/3h-william" target="_blank" rel="external">https://github.com/3h-william</a><br>出处：<a href="http://3h-william.github.io">http://3h-william.github.io</a>  </p>
 <hr>
 
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/11/10/zookeeper_stuck_dns_network/" data-id="ciytwyfl5000fwb094y3npcys" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/zookeeper/">zookeeper</a></li></ul>
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
 
-    </footer>
-  </div>
-  
+
+
+</div>
+
+    <a data-url="http://3h-william.github.io/2015/11/10/zookeeper_stuck_dns_network/" data-id="cizl54bwl000h9c09b5feup94" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+<script>
+    (function ($) {
+        // Prevent duplicate binding
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+            
+    
+        <a href="http://3h-william.github.io/2015/11/10/zookeeper_stuck_dns_network/#comments" class="article-comment-link">Comments</a>
+    
+
+        </footer>
+    </div>
+    
 </article>
 
 
-  
-    <article id="post-als_report" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/10/05/als_report/" class="article-date">
-  <time datetime="2015-10-05T06:08:11.000Z" itemprop="datePublished">2015-10-05</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/10/05/als_report/">推荐算法与协同过滤</a>
-    </h1>
-  
 
-      </header>
+    <article id="post-als_report" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
     
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="注-只是个人半年前的一些研究总结，在此仅此记录。"><a href="#注-只是个人半年前的一些研究总结，在此仅此记录。" class="headerlink" title="(注: 只是个人半年前的一些研究总结，在此仅此记录。)"></a>(注: 只是个人半年前的一些研究总结，在此仅此记录。)</h1><h1 id="1-背景资料："><a href="#1-背景资料：" class="headerlink" title="1    背景资料："></a>1    背景资料：</h1><p>推荐系统基于两种策略：<br>a)    基于内容的过滤(Content-based filtering)<br>b)    协同过滤 (Collaborative filtering) (CF)<br>模型：<br>)    内容过滤需要根据内容创建模板，诸如用物品的title，名字。等等。<br>当然也可以根据用户建立模板。用户的画像等等。<br>b)    基于协同过滤。会从历史记录中，找出item-User之间的关系，并建立相关模型。<br>差异：<br>从某些场景来看，内容过滤更为优秀，比如一个新用户(没有任何的历史)。或是一个新商品，没有任何的关联数据。这个时候基于Content-Based的过滤，显得更恰当。<br>然而，在大多数的场景下，协同过滤会变得更为优秀。原因在于，他更充分的考虑到User-Item之间的关系。当然，该方法也使用的更为广泛。</p>
+        <h1 itemprop="name">
+            <a class="article-title" href="/2015/10/05/als_report/">推荐算法与协同过滤</a>
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2015/10/05/als_report/">
+            <time datetime="2015-10-05T06:08:11.000Z" itemprop="datePublished">2015-10-05</time>
+        </a>
+    </div>
+
+
+                        
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/MachineLearning/">MachineLearning</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <h1 id="注-只是个人半年前的一些研究总结，在此仅此记录。"><a href="#注-只是个人半年前的一些研究总结，在此仅此记录。" class="headerlink" title="(注: 只是个人半年前的一些研究总结，在此仅此记录。)"></a>(注: 只是个人半年前的一些研究总结，在此仅此记录。)</h1><h1 id="1-背景资料："><a href="#1-背景资料：" class="headerlink" title="1    背景资料："></a>1    背景资料：</h1><p>推荐系统基于两种策略：<br>a)    基于内容的过滤(Content-based filtering)<br>b)    协同过滤 (Collaborative filtering) (CF)<br>模型：<br>)    内容过滤需要根据内容创建模板，诸如用物品的title，名字。等等。<br>当然也可以根据用户建立模板。用户的画像等等。<br>b)    基于协同过滤。会从历史记录中，找出item-User之间的关系，并建立相关模型。<br>差异：<br>从某些场景来看，内容过滤更为优秀，比如一个新用户(没有任何的历史)。或是一个新商品，没有任何的关联数据。这个时候基于Content-Based的过滤，显得更恰当。<br>然而，在大多数的场景下，协同过滤会变得更为优秀。原因在于，他更充分的考虑到User-Item之间的关系。当然，该方法也使用的更为广泛。</p>
 <h1 id="2-协同过滤的集中分类"><a href="#2-协同过滤的集中分类" class="headerlink" title="2 协同过滤的集中分类"></a>2 协同过滤的集中分类</h1><h2 id="2-1-基于物品的协同过滤"><a href="#2-1-基于物品的协同过滤" class="headerlink" title="2.1 基于物品的协同过滤"></a>2.1 基于物品的协同过滤</h2><p>构建  Item -&gt; User的向量: V(I-&gt;U)<br>      计算 各个Verctor之间的相似度<br>直观理解: 把和你之前喜欢的物品近似的物品推荐给你  </p>
 <p><img src="/img/als_report/p1.jpg" alt=""></p>
 <h2 id="2-2-基于用户的的协同过滤"><a href="#2-2-基于用户的的协同过滤" class="headerlink" title="2.2 基于用户的的协同过滤"></a>2.2 基于用户的的协同过滤</h2><p>构建  User -&gt; Item的向量: V(U-&gt;I)<br>      计算 各个Verctor之间的相似度<br>直观理解：把就是把与你有相同爱好的用户所喜欢的物品,推荐给你<br><img src="/img/als_report/p2.jpg" alt="">  </p>
@@ -331,93 +863,269 @@ Scala 主要应用于服务底层
 <p>规则化:<br><a href="http://blog.csdn.net/u012162613/article/details/44261657" target="_blank" rel="external">http://blog.csdn.net/u012162613/article/details/44261657</a></p>
 <p>Latent-factor-models<br><a href="http://www.slideshare.net/sscdotopen/latent-factor-models-for-collaborative-filtering" target="_blank" rel="external">http://www.slideshare.net/sscdotopen/latent-factor-models-for-collaborative-filtering</a></p>
 <hr>
-<p>作者：3h-william<br>联系: <a href="https://github.com/3h-william" target="_blank" rel="external">https://github.com/3h-william</a><br>出处：<a href="http://3h-william.github.io" target="_blank" rel="external">http://3h-william.github.io</a>  </p>
+<p>作者：3h_william<br>联系: <a href="https://github.com/3h-william" target="_blank" rel="external">https://github.com/3h-william</a><br>出处：<a href="http://3h-william.github.io">http://3h-william.github.io</a>  </p>
 <hr>
 
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/10/05/als_report/" data-id="ciytwyfkj0001wb09pkzgum0m" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MachineLearning/">MachineLearning</a></li></ul>
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
 
-    </footer>
-  </div>
-  
+
+
+</div>
+
+    <a data-url="http://3h-william.github.io/2015/10/05/als_report/" data-id="cizl54bw400039c09n9vphuit" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+<script>
+    (function ($) {
+        // Prevent duplicate binding
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+            
+    
+        <a href="http://3h-william.github.io/2015/10/05/als_report/#comments" class="article-comment-link">Comments</a>
+    
+
+        </footer>
+    </div>
+    
 </article>
 
 
-  
-    <article id="post-sqoop_orc" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/09/11/sqoop_orc/" class="article-date">
-  <time datetime="2015-09-11T07:00:11.000Z" itemprop="datePublished">2015-09-11</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/09/11/sqoop_orc/">使用sqoop生成ORC格式的文件，并给Hive加载</a>
-    </h1>
-  
 
-      </header>
+    <article id="post-sqoop_orc" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
     
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>在当前版本: sqoop-1.4.5(CDH540)中的sqoop并不支持导出格式为orcfile的格式。因此，如果我们想将数据从DB=&gt;HDFS，并生成ORC格式，只有两个办法。</p>
+        <h1 itemprop="name">
+            <a class="article-title" href="/2015/09/11/sqoop_orc/">使用sqoop生成ORC格式的文件，并给Hive加载</a>
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2015/09/11/sqoop_orc/">
+            <time datetime="2015-09-11T07:00:11.000Z" itemprop="datePublished">2015-09-11</time>
+        </a>
+    </div>
+
+
+                        
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/hive/">hive</a>, <a class="tag-link" href="/tags/sqoop/">sqoop</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>在当前版本: sqoop-1.4.5(CDH540)中的sqoop并不支持导出格式为orcfile的格式。因此，如果我们想将数据从DB=&gt;HDFS，并生成ORC格式，只有两个办法。</p>
 <p>-&gt; a) 使用HCatalog服务，目前没有测试过，看文档是可以生成ORC的格式。<br>-&gt; b) 原始办法，通过Hive的insert命令将一张原本不是ORC格式的数据，导入到另一个ORC格式中，这样就有了ORC格式的文件。 但该方法会造成时间、资源消耗翻倍。</p>
 <h1 id="DIY"><a href="#DIY" class="headerlink" title="DIY"></a>DIY</h1><p>既然如此，自己动手，丰衣足食。介于近年来对于sqoop的使用经验，很方便的定位到了几个地方，并加入了一些类和方法，最终达到了目的。当然，因为我们的需求目前仅仅是从DB = &gt; HDFS，即只是增加了import方法中的参数，并没有在export =&gt; DB中增加。</p>
 <p>具体代码可以参考我已经提供的版本 <a href="https://github.com/3h-william/sqoop-orc-import" target="_blank" rel="external">link</a><br>使用ant编译后，替换原来的sqoop jar即可。</p>
 <h1 id="关键点"><a href="#关键点" class="headerlink" title="关键点"></a>关键点</h1><p>-&gt; 1) 使用hive的提供的TypeInfoUtils 构建ORC file的Schema.并传递到每一个Map中<br>-&gt; 2) 使用 org.apache.hadoop.hive.ql.io.orc.OrcNewOutputFormat 作为输出格式</p>
 <hr>
-<p>作者：3h-william<br>联系: <a href="https://github.com/3h-william" target="_blank" rel="external">https://github.com/3h-william</a><br>出处：<a href="http://3h-william.github.io" target="_blank" rel="external">http://3h-william.github.io</a>  </p>
+<p>作者：3h_william<br>联系: <a href="https://github.com/3h-william" target="_blank" rel="external">https://github.com/3h-william</a><br>出处：<a href="http://3h-william.github.io">http://3h-william.github.io</a>  </p>
 <hr>
 
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/09/11/sqoop_orc/" data-id="ciytwyfl3000dwb09axklk24r" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hive/">hive</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sqoop/">sqoop</a></li></ul>
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
 
-    </footer>
-  </div>
-  
+
+
+</div>
+
+    <a data-url="http://3h-william.github.io/2015/09/11/sqoop_orc/" data-id="cizl54bwj000f9c095p92i6aj" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+<script>
+    (function ($) {
+        // Prevent duplicate binding
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+            
+    
+        <a href="http://3h-william.github.io/2015/09/11/sqoop_orc/#comments" class="article-comment-link">Comments</a>
+    
+
+        </footer>
+    </div>
+    
 </article>
 
 
-  
-    <article id="post-hbase_balance_problem" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/09/08/hbase_balance_problem/" class="article-date">
-  <time datetime="2015-09-08T06:08:11.000Z" itemprop="datePublished">2015-09-08</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/09/08/hbase_balance_problem/">HBase Coprocessor问题引起异常Balance</a>
-    </h1>
-  
 
-      </header>
+    <article id="post-hbase_balance_problem" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
     
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="问题背景"><a href="#问题背景" class="headerlink" title="问题背景"></a>问题背景</h1><p>最近发现HBase集群的文件compaction次数明显增加。经常到时M/R job扫描snapshot文件的时候发生文件找不到，为此trace了一下日志，大致发现了问题。<br><img src="/img/hbase_balance_problems/balance_metrics.png" alt="balance统计"></p>
+        <h1 itemprop="name">
+            <a class="article-title" href="/2015/09/08/hbase_balance_problem/">HBase Coprocessor问题引起异常Balance</a>
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2015/09/08/hbase_balance_problem/">
+            <time datetime="2015-09-08T06:08:11.000Z" itemprop="datePublished">2015-09-08</time>
+        </a>
+    </div>
+
+
+                        
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/hbase/">hbase</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <h1 id="问题背景"><a href="#问题背景" class="headerlink" title="问题背景"></a>问题背景</h1><p>最近发现HBase集群的文件compaction次数明显增加。经常到时M/R job扫描snapshot文件的时候发生文件找不到，为此trace了一下日志，大致发现了问题。<br><img src="/img/hbase_balance_problems/balance_metrics.png" alt="balance统计"></p>
 <h1 id="问题大致流程Trace"><a href="#问题大致流程Trace" class="headerlink" title="问题大致流程Trace"></a>问题大致流程Trace</h1><ul>
 <li>1)  全量索引M/R  job 失败   </li>
 <li>2)  HFile文件不存在  </li>
@@ -459,47 +1167,135 @@ Scala 主要应用于服务底层
 </ul>
 <p>遗留问题:<br>从日志中有一个问题: server24这台机器在9/3 15:29已经dead，为何balance策略仍然会选择这台机器。是不是又bug…</p>
 <hr>
-<p>作者：3h-william<br>联系: <a href="https://github.com/3h-william" target="_blank" rel="external">https://github.com/3h-william</a><br>出处：<a href="http://3h-william.github.io" target="_blank" rel="external">http://3h-william.github.io</a>  </p>
+<p>作者：3h_william<br>联系: <a href="https://github.com/3h-william" target="_blank" rel="external">https://github.com/3h-william</a><br>出处：<a href="http://3h-william.github.io">http://3h-william.github.io</a>  </p>
 <hr>
 
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/09/08/hbase_balance_problem/" data-id="ciytwyfkv0005wb09n6b20wji" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hbase/">hbase</a></li></ul>
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
 
-    </footer>
-  </div>
-  
+
+
+</div>
+
+    <a data-url="http://3h-william.github.io/2015/09/08/hbase_balance_problem/" data-id="cizl54bwb00079c09c9oowvhp" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+<script>
+    (function ($) {
+        // Prevent duplicate binding
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+            
+    
+        <a href="http://3h-william.github.io/2015/09/08/hbase_balance_problem/#comments" class="article-comment-link">Comments</a>
+    
+
+        </footer>
+    </div>
+    
 </article>
 
 
-  
-    <article id="post-hbase-bulkload" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/08/27/hbase-bulkload/" class="article-date">
-  <time datetime="2015-08-27T06:08:11.000Z" itemprop="datePublished">2015-08-27</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/08/27/hbase-bulkload/">hbase bulkload 相关整理</a>
-    </h1>
-  
 
-      </header>
+    <article id="post-hbase-bulkload" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
     
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>由于近期Team内有同学用到bulkload,整理了一下过往我用到的bulkload的相关使用经验<br>基于<strong>hbase 0.90</strong>和<strong>0.94</strong>版本做一些简单的分析，可供参考。  </p>
+        <h1 itemprop="name">
+            <a class="article-title" href="/2015/08/27/hbase-bulkload/">hbase bulkload 相关整理</a>
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2015/08/27/hbase-bulkload/">
+            <time datetime="2015-08-27T06:08:11.000Z" itemprop="datePublished">2015-08-27</time>
+        </a>
+    </div>
+
+
+                        
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/hbase/">hbase</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <p>由于近期Team内有同学用到bulkload,整理了一下过往我用到的bulkload的相关使用经验<br>基于<strong>hbase 0.90</strong>和<strong>0.94</strong>版本做一些简单的分析，可供参考。  </p>
 <h2 id="1-概述"><a href="#1-概述" class="headerlink" title="1. 概述"></a><strong>1. 概述</strong></h2><p><a href="http://hbase.apache.org/book.html#arch.bulk.load" target="_blank" rel="external">官方说明</a><br>[0.94官方说明] (<a href="http://hbase.apache.org/0.94/book/arch.bulk.load.html" target="_blank" rel="external">http://hbase.apache.org/0.94/book/arch.bulk.load.html</a>)  </p>
 <p>简单的说，bluk load 是能够批量加载hfile =&gt; hbase的技术。<br>服务端，RegionServer处理客户端的bulkload请求。<br>客户端，向RegionServer发起blukload请求。  </p>
 <h3 id="1-1-案例"><a href="#1-1-案例" class="headerlink" title="1.1. 案例"></a><strong>1.1. 案例</strong></h3><p>在2013年的maillog项目中，我们使用了bulk load技术。批量加载了从M/R生成的HFile数据。<br>因为是预先生成的HFile和处理过的，所以是一个HFile对应1个Region</p>
@@ -530,47 +1326,135 @@ c)  加载。
 </code></pre><p>对此，官方设计中有一段说明:<br>If the region boundaries have changed during the course of bulk load preparation, or between the preparation and completion steps, the completebulkloads utility will automatically split the data files into pieces corresponding to the new boundaries. This process is not optimally efficient, so users should take care to minimize the delay between preparing a bulk load and importing it into the cluster, especially if other clients are simultaneously loading data through other means.</p>
 <p>大致意思是，即使客户端工具能够完成split的工作，但并不是最有效的方式，用户应该注意边界问题。</p>
 <hr>
-<p>作者：3h-william<br>联系: <a href="https://github.com/3h-william" target="_blank" rel="external">https://github.com/3h-william</a><br>出处：<a href="http://3h-william.github.io" target="_blank" rel="external">http://3h-william.github.io</a>  </p>
+<p>作者：3h_william<br>联系: <a href="https://github.com/3h-william" target="_blank" rel="external">https://github.com/3h-william</a><br>出处：<a href="http://3h-william.github.io">http://3h-william.github.io</a>  </p>
 <hr>
 
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/08/27/hbase-bulkload/" data-id="ciytwyfks0004wb098khekmck" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hbase/">hbase</a></li></ul>
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
 
-    </footer>
-  </div>
-  
+
+
+</div>
+
+    <a data-url="http://3h-william.github.io/2015/08/27/hbase-bulkload/" data-id="cizl54bw600049c09yy30gpap" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+<script>
+    (function ($) {
+        // Prevent duplicate binding
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+            
+    
+        <a href="http://3h-william.github.io/2015/08/27/hbase-bulkload/#comments" class="article-comment-link">Comments</a>
+    
+
+        </footer>
+    </div>
+    
 </article>
 
 
-  
-    <article id="post-elasticsearch_dc" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/08/10/elasticsearch_dc/" class="article-date">
-  <time datetime="2015-08-10T01:50:22.000Z" itemprop="datePublished">2015-08-10</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/08/10/elasticsearch_dc/">为ElasticSearch 添加支持跨DC的特性</a>
-    </h1>
-  
 
-      </header>
+    <article id="post-elasticsearch_dc" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
     
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>无意间发现，去年年初提到社区的改动，在去年8月得到回复，虽然没有被采纳…<br><a href="https://github.com/elastic/elasticsearch/pull/4651#issuecomment-51578376" target="_blank" rel="external">https://github.com/elastic/elasticsearch/pull/4651#issuecomment-51578376</a><br>对方提出两点:</p>
+        <h1 itemprop="name">
+            <a class="article-title" href="/2015/08/10/elasticsearch_dc/">为ElasticSearch 添加支持跨DC的特性</a>
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2015/08/10/elasticsearch_dc/">
+            <time datetime="2015-08-10T01:50:22.000Z" itemprop="datePublished">2015-08-10</time>
+        </a>
+    </div>
+
+
+                        
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/elasticsearch/">elasticsearch</a>, <a class="tag-link" href="/tags/search/">search</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>无意间发现，去年年初提到社区的改动，在去年8月得到回复，虽然没有被采纳…<br><a href="https://github.com/elastic/elasticsearch/pull/4651#issuecomment-51578376" target="_blank" rel="external">https://github.com/elastic/elasticsearch/pull/4651#issuecomment-51578376</a><br>对方提出两点:</p>
 <ol>
 <li>不赞成ElasticSearch跨越数据中心构建。   </li>
 <li>认为同步和延迟会造成比较大的问题。    </li>
@@ -589,47 +1473,135 @@ c)  加载。
 </ol>
 <h3 id="代码部分，可参考我已经提交的版本"><a href="#代码部分，可参考我已经提交的版本" class="headerlink" title="代码部分，可参考我已经提交的版本"></a>代码部分，可参考我已经提交的版本</h3><p><a href="https://github.com/3h-william/elasticsearch-dc-version0.0.1" target="_blank" rel="external">https://github.com/3h-william/elasticsearch-dc-version0.0.1</a></p>
 <hr>
-<p>作者：3h-william<br>联系: <a href="https://github.com/3h-william" target="_blank" rel="external">https://github.com/3h-william</a><br>出处：<a href="http://3h-william.github.io" target="_blank" rel="external">http://3h-william.github.io</a>  </p>
+<p>作者：3h_william<br>联系: <a href="https://github.com/3h-william" target="_blank" rel="external">https://github.com/3h-william</a><br>出处：<a href="http://3h-william.github.io">http://3h-william.github.io</a>  </p>
 <hr>
 
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/08/10/elasticsearch_dc/" data-id="ciytwyfkq0003wb09ici352ye" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/elasticsearch/">elasticsearch</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/search/">search</a></li></ul>
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
 
-    </footer>
-  </div>
-  
+
+
+</div>
+
+    <a data-url="http://3h-william.github.io/2015/08/10/elasticsearch_dc/" data-id="cizl54bw900059c09fybs1n1a" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+<script>
+    (function ($) {
+        // Prevent duplicate binding
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+            
+    
+        <a href="http://3h-william.github.io/2015/08/10/elasticsearch_dc/#comments" class="article-comment-link">Comments</a>
+    
+
+        </footer>
+    </div>
+    
 </article>
 
 
-  
-    <article id="post-hbase_tsdb_issue" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/06/07/hbase_tsdb_issue/" class="article-date">
-  <time datetime="2015-06-07T01:08:11.000Z" itemprop="datePublished">2015-06-07</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/06/07/hbase_tsdb_issue/">Open Tsdb 引起 HBase的严重问题</a>
-    </h1>
-  
 
-      </header>
+    <article id="post-hbase_tsdb_issue" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
     
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>前一段时间，内部用到TSDB，发现经常引起HBase服务挂掉。最终，我这里经过一些排查，找到了问题。<br>并且，我们已经向社区提出了这个问题。在这里，以此记录解决过程。  </p>
+        <h1 itemprop="name">
+            <a class="article-title" href="/2015/06/07/hbase_tsdb_issue/">Open Tsdb 引起 HBase的严重问题</a>
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2015/06/07/hbase_tsdb_issue/">
+            <time datetime="2015-06-07T01:08:11.000Z" itemprop="datePublished">2015-06-07</time>
+        </a>
+    </div>
+
+
+                        
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/hbase/">hbase</a>, <a class="tag-link" href="/tags/tsdb/">tsdb</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>前一段时间，内部用到TSDB，发现经常引起HBase服务挂掉。最终，我这里经过一些排查，找到了问题。<br>并且，我们已经向社区提出了这个问题。在这里，以此记录解决过程。  </p>
 <h1 id="一-根本原因"><a href="#一-根本原因" class="headerlink" title="一. 根本原因:"></a>一. 根本原因:</h1><p>因为TSDB的合并导致单条记录的column非常大。一旦大于MAX_CHUNK_SIZE_KEY = “hfile.index.block.max.size”(默认128K);  就由一定几率使得Memstore  Flush无限进行。<br>并且本地已经模拟出该场景。我插入了一条Column非常大的记录(150K) ，然后调用flush， RS进入死循环，HDFS文件不断增大.</p>
 <p><img src="/img/tsdb_hbase_issue/1.jpg" alt=""></p>
 <h1 id="二-大致分析流程如下"><a href="#二-大致分析流程如下" class="headerlink" title="二. 大致分析流程如下"></a>二. 大致分析流程如下</h1><p>1.今天再次走代码流程和日志记录，纠正了昨天判断是HBase Compaction触发导致的问题。(出问题的那个点，并没有进行HBase层面的Compact)<br>2.进一步确认，是因为HBase的Memstore Flush成HFile导致。 （Hfile也是存在于Region/.tmp中,在一个时间点,HBase都做了一次flush<br>3.随后定位到，问题出在了Flush Memstore的时候，需要生产HFile V2 下的BlockData Index, 并导致写索引的死循环。  </p>
@@ -637,160 +1609,292 @@ c)  加载。
 <h1 id="三-社区反映"><a href="#三-社区反映" class="headerlink" title="三. 社区反映"></a>三. 社区反映</h1><p><a href="https://issues.apache.org/jira/browse/HBASE-12320" target="_blank" rel="external">https://issues.apache.org/jira/browse/HBASE-12320</a><br>这是去年在JIRA 上提出的 ISSUE，但一直都没有得到解决。虽然已经有人意识到了问题。<br>事实上，不论是ColumnName的大小，或是Rowkey的大小，或是Faimily的大小，一旦超过这个阀值，就会出问题。<br>同时，只是建议，HBase的单个KV的大小，不超过128K。   </p>
 <h1 id="四-解决方案"><a href="#四-解决方案" class="headerlink" title="四. 解决方案"></a>四. 解决方案</h1><p>注意TSDB的推送的数据，不要分的太小。或者，关闭compaction(TSDB层面)  </p>
 <hr>
-<p>作者：3h-william<br>联系: <a href="https://github.com/3h-william" target="_blank" rel="external">https://github.com/3h-william</a><br>出处：<a href="http://3h-william.github.io" target="_blank" rel="external">http://3h-william.github.io</a>  </p>
+<p>作者：3h_william<br>联系: <a href="https://github.com/3h-william" target="_blank" rel="external">https://github.com/3h-william</a><br>出处：<a href="http://3h-william.github.io">http://3h-william.github.io</a>  </p>
 <hr>
 
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/06/07/hbase_tsdb_issue/" data-id="ciytwyfkw0008wb09b95pr06e" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hbase/">hbase</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tsdb/">tsdb</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/06/01/hello-world/" class="article-date">
-  <time datetime="2015-06-01T06:08:11.000Z" itemprop="datePublished">2015-06-01</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
         
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/06/01/hello-world/">Hello World , Hello PPG , Hello Sunshine</a>
-    </h1>
-  
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
 
-      </header>
+
+
+</div>
+
+    <a data-url="http://3h-william.github.io/2015/06/07/hbase_tsdb_issue/" data-id="cizl54bwc00089c09omcgy5py" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+<script>
+    (function ($) {
+        // Prevent duplicate binding
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+            
     
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>You are always my sunshine…</p>
+        <a href="http://3h-william.github.io/2015/06/07/hbase_tsdb_issue/#comments" class="article-comment-link">Comments</a>
+    
 
-      
+        </footer>
     </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/06/01/hello-world/" data-id="ciytwyfkz0009wb09sbv1hj5u" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
+    
 </article>
 
 
-  
 
+    <nav id="page-nav">
+        <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+    </nav>
 </section>
+            
+                <aside id="sidebar">
+   
         
-          <aside id="sidebar">
-  
+    <div class="widget-wrap">
+        <h3 class="widget-title">recent</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/02/25/akka_split_brain/" class="thumbnail">
     
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
 
-  
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"></p>
+                            <p class="item-title"><a href="/2017/02/25/akka_split_brain/" class="title">Akka集群对于脑裂的策略</a></p>
+                            <p class="item-date"><time datetime="2017-02-25T09:35:00.000Z" itemprop="datePublished">2017-02-25</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/01/24/lft/" class="thumbnail">
     
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tags</h3>
-    <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/MachineLearning/">MachineLearning</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/akka/">akka</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/elasticsearch/">elasticsearch</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hbase/">hbase</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hive/">hive</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scala/">scala</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/search/">search</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sqoop/">sqoop</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tsdb/">tsdb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zookeeper/">zookeeper</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/技术产品/">技术产品</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/技术架构/">技术架构</a></li></ul>
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"></p>
+                            <p class="item-title"><a href="/2017/01/24/lft/" class="title">新一代分布式调度系统--雷峰塔架构</a></p>
+                            <p class="item-date"><time datetime="2017-01-24T07:30:11.000Z" itemprop="datePublished">2017-01-24</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2017/01/24/akka/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"></p>
+                            <p class="item-title"><a href="/2017/01/24/akka/" class="title">项目中，使用akka的一些经验和总结</a></p>
+                            <p class="item-date"><time datetime="2017-01-24T07:00:11.000Z" itemprop="datePublished">2017-01-24</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2015/11/10/zookeeper_stuck_dns_network/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"></p>
+                            <p class="item-title"><a href="/2015/11/10/zookeeper_stuck_dns_network/" class="title">使用Zookeeper过程中遇到客户端stuck的问题和解决建议</a></p>
+                            <p class="item-date"><time datetime="2015-11-10T01:18:11.000Z" itemprop="datePublished">2015-11-10</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2015/10/05/als_report/" class="thumbnail">
+    
+    
+        <span class="thumbnail-image thumbnail-none"></span>
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"></p>
+                            <p class="item-title"><a href="/2015/10/05/als_report/" class="title">推荐算法与协同过滤</a></p>
+                            <p class="item-date"><time datetime="2015-10-05T06:08:11.000Z" itemprop="datePublished">2015-10-05</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
     </div>
-  </div>
 
-
-  
     
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tag Cloud</h3>
-    <div class="widget tagcloud">
-      <a href="/tags/MachineLearning/" style="font-size: 10px;">MachineLearning</a> <a href="/tags/akka/" style="font-size: 15px;">akka</a> <a href="/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/tags/hbase/" style="font-size: 20px;">hbase</a> <a href="/tags/hive/" style="font-size: 10px;">hive</a> <a href="/tags/scala/" style="font-size: 10px;">scala</a> <a href="/tags/search/" style="font-size: 10px;">search</a> <a href="/tags/sqoop/" style="font-size: 10px;">sqoop</a> <a href="/tags/tsdb/" style="font-size: 10px;">tsdb</a> <a href="/tags/zookeeper/" style="font-size: 10px;">zookeeper</a> <a href="/tags/技术产品/" style="font-size: 10px;">技术产品</a> <a href="/tags/技术架构/" style="font-size: 10px;">技术架构</a>
-    </div>
-  </div>
-
-  
+        
     
-  <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a></li></ul>
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">archives</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">October 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/06/">June 2015</a><span class="archive-list-count">2</span></li></ul>
+        </div>
     </div>
-  </div>
 
-
-  
     
-  <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
-    <div class="widget">
-      <ul>
         
-          <li>
-            <a href="/2017/01/24/lft/">新一代分布式调度系统--雷峰塔架构</a>
-          </li>
-        
-          <li>
-            <a href="/2017/01/24/akka/">项目中，使用akka的一些经验和总结</a>
-          </li>
-        
-          <li>
-            <a href="/2015/11/10/zookeeper_stuck_dns_network/">使用Zookeeper过程中遇到客户端stuck的问题和解决建议</a>
-          </li>
-        
-          <li>
-            <a href="/2015/10/05/als_report/">推荐算法与协同过滤</a>
-          </li>
-        
-          <li>
-            <a href="/2015/09/11/sqoop_orc/">使用sqoop生成ORC格式的文件，并给Hive加载</a>
-          </li>
-        
-      </ul>
+    <div class="widget-wrap">
+        <h3 class="widget-title">tags</h3>
+        <div class="widget">
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/MachineLearning/">MachineLearning</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/akka/">akka</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/elasticsearch/">elasticsearch</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hbase/">hbase</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hive/">hive</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scala/">scala</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/search/">search</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sqoop/">sqoop</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tsdb/">tsdb</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zookeeper/">zookeeper</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/分布式系统/">分布式系统</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/技术产品/">技术产品</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/技术架构/">技术架构</a><span class="tag-list-count">1</span></li></ul>
+        </div>
     </div>
-  </div>
 
-  
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">tag cloud</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/MachineLearning/" style="font-size: 10px;">MachineLearning</a> <a href="/tags/akka/" style="font-size: 20px;">akka</a> <a href="/tags/elasticsearch/" style="font-size: 10px;">elasticsearch</a> <a href="/tags/hbase/" style="font-size: 20px;">hbase</a> <a href="/tags/hive/" style="font-size: 10px;">hive</a> <a href="/tags/scala/" style="font-size: 10px;">scala</a> <a href="/tags/search/" style="font-size: 10px;">search</a> <a href="/tags/sqoop/" style="font-size: 10px;">sqoop</a> <a href="/tags/tsdb/" style="font-size: 10px;">tsdb</a> <a href="/tags/zookeeper/" style="font-size: 10px;">zookeeper</a> <a href="/tags/分布式系统/" style="font-size: 10px;">分布式系统</a> <a href="/tags/技术产品/" style="font-size: 10px;">技术产品</a> <a href="/tags/技术架构/" style="font-size: 10px;">技术架构</a>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">links</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="http://hexo.io">Hexo</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
 </aside>
-        
-      </div>
-      <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      &copy; 2017 3h.william@gmail.com<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+            
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2017 3h.william@gmail.com<br>
+            Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>
+        </div>
     </div>
-  </div>
 </footer>
-    </div>
-    <nav id="mobile-nav">
-  
-    <a href="/" class="mobile-nav-link">Home</a>
-  
-    <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-</nav>
+        
+    
+    <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid=2126168"></script>
+
+
+
+    
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+        <script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
     
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 
 
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
 
-
-<script src="/js/script.js"></script>
-
-  </div>
+    </div>
 </body>
 </html>
