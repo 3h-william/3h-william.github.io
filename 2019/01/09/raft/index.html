@@ -3,17 +3,23 @@
 <head>
     <meta charset="utf-8">
     
-    <title>Tag: elasticsearch | 3h_william</title>
+    <title>raft协议的实现 | 3h_william</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta name="description" content="技术/产品博客">
-<meta property="og:type" content="website">
-<meta property="og:title" content="3h_william">
-<meta property="og:url" content="http://3h-william.github.io/tags/elasticsearch/index.html">
+    <meta name="description" content="背景  一致性协议(共识机制) 的理论近年来借助于大数据、分布式系统、区块链等技术的发展，从理论到实践都有了很多成果，  比如Zab的Zookeeper，Paxos的ElasticSearch，Raft的Etcd，还有各种区块链的共识一致性机制，比如 Pow , Pos , Dpos等等，  这些协议和技术都是为了解决一个核心问题: 在分布式环境中，如何保证数据的一致性和可靠性。  
+什么Raft">
+<meta property="og:type" content="article">
+<meta property="og:title" content="raft协议的实现">
+<meta property="og:url" content="http://3h-william.github.io/2019/01/09/raft/index.html">
 <meta property="og:site_name" content="3h_william">
-<meta property="og:description" content="技术/产品博客">
+<meta property="og:description" content="背景  一致性协议(共识机制) 的理论近年来借助于大数据、分布式系统、区块链等技术的发展，从理论到实践都有了很多成果，  比如Zab的Zookeeper，Paxos的ElasticSearch，Raft的Etcd，还有各种区块链的共识一致性机制，比如 Pow , Pos , Dpos等等，  这些协议和技术都是为了解决一个核心问题: 在分布式环境中，如何保证数据的一致性和可靠性。  
+什么Raft">
+<meta property="og:image" content="http://3h-william.github.io/img/raft/raft_core.png">
+<meta property="og:updated_time" content="2019-01-09T07:26:05.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="3h_william">
-<meta name="twitter:description" content="技术/产品博客">
+<meta name="twitter:title" content="raft协议的实现">
+<meta name="twitter:description" content="背景  一致性协议(共识机制) 的理论近年来借助于大数据、分布式系统、区块链等技术的发展，从理论到实践都有了很多成果，  比如Zab的Zookeeper，Paxos的ElasticSearch，Raft的Etcd，还有各种区块链的共识一致性机制，比如 Pow , Pos , Dpos等等，  这些协议和技术都是为了解决一个核心问题: 在分布式环境中，如何保证数据的一致性和可靠性。  
+什么Raft">
+<meta name="twitter:image" content="http://3h-william.github.io/img/raft/raft_core.png">
     
 
     
@@ -176,45 +182,171 @@
 </aside>
 
             
-            <section id="main">
-<div class="timeline timeline-wrap">
-    <div class="timeline-row timeline-row-major">
-        <span class="node"><i class="fa fa-tag"></i></span>
-        <h1 class="title">#elasticsearch</h1>
-    </div>
-    
-        <div class="timeline-row">
-            <span class="node"></span>
-            <div class="content">
+            <section id="main"><article id="post-raft" class="article article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
                 
     
-        <h1 itemprop="name">
-            <a class="timeline-article-title" href="/2015/08/10/elasticsearch_dc/">为ElasticSearch 添加支持跨DC的特性</a>
+        <h1 class="article-title" itemprop="name">
+            raft协议的实现
         </h1>
     
 
-                <div class="article-meta">
-                    
+                
+                    <div class="article-meta">
+                        
     <div class="article-date">
         <i class="fa fa-calendar"></i>
-        <a href="/2015/08/10/elasticsearch_dc/">
-            <time datetime="2015-08-10T01:50:22.000Z" itemprop="datePublished">2015-08-10</time>
+        <a href="/2019/01/09/raft/">
+            <time datetime="2019-01-09T07:00:00.000Z" itemprop="datePublished">2019-01-09</time>
         </a>
     </div>
 
 
-                    
-                    
+                        
+                        
     <div class="article-tag">
         <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/elasticsearch/">elasticsearch</a>, <a class="tag-link" href="/tags/search/">search</a>
+        <a class="tag-link" href="/tags/etcd/">etcd</a>, <a class="tag-link" href="/tags/raft/">raft</a>, <a class="tag-link" href="/tags/技术架构/">技术架构</a>
     </div>
 
-                </div>
-            </div>
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>  一致性协议(共识机制) 的理论近年来借助于大数据、分布式系统、区块链等技术的发展，从理论到实践都有了很多成果，<br>  比如Zab的Zookeeper，Paxos的ElasticSearch，Raft的Etcd，还有各种区块链的共识一致性机制，比如 Pow , Pos , Dpos等等，<br>  这些协议和技术都是为了解决一个核心问题: 在分布式环境中，如何保证数据的一致性和可靠性。  </p>
+<h1 id="什么Raft"><a href="#什么Raft" class="headerlink" title="什么Raft"></a>什么Raft</h1><p>  <a href="https://raft.github.io/" target="_blank" rel="external">Raft</a> 的主要思想和实现在许多篇文章中已经有阐述，这里不再复述，可以参阅<br>  <a href="https://www.infoq.cn/article/raft-paper" target="_blank" rel="external">raft-paper</a> 等文章  </p>
+<h1 id="什么是Etcd"><a href="#什么是Etcd" class="headerlink" title="什么是Etcd"></a>什么是Etcd</h1><p>  <a href="https://github.com/etcd-io/etcd" target="_blank" rel="external">Etcd</a> 分布式的kv存储系统，当然对比一些诸如HBase/Cassandra 甚至Redis的 Nosql ,cache系统，<br>  etcd更多的优势是在于它的可靠性，可靠性的保证就是以raft为核心的一致性协议所提供</p>
+<h1 id="Java实现"><a href="#Java实现" class="headerlink" title="Java实现"></a>Java实现</h1><p>  作者用Java语言，复刻了Golang etcd/raft的代码，用以学习和测试Raft协议，后续会不断添加新功能<br>  <a href="https://github.com/3h-william/raft" target="_blank" rel="external">raft-java</a></p>
+<h1 id="Raft-Core的主要模块和架构"><a href="#Raft-Core的主要模块和架构" class="headerlink" title="Raft Core的主要模块和架构"></a>Raft Core的主要模块和架构</h1><p><img src="/img/raft/raft_core.png" alt=""></p>
+<h2 id="RaftCore"><a href="#RaftCore" class="headerlink" title="RaftCore"></a>RaftCore</h2><p>   RaftCore是raft协议的核心</p>
+<ol>
+<li>逻辑控制<br>接受来自外部的Message请求并处理，是通过方法 Step 来处理。 不同的角色(Leader,Candidate,Follower)有各自的处理方法。<br>也包括了，是否发起自身竞争成为Leader的机制以及投票给其他Leader的机制。</li>
+<li>RaftStatus<br>每一个节点都有存储了本节点关于Raft协议下的各种必要状态。 包括当前的term，leader信息，各类超时信息，以及一些配置参数。</li>
+<li>Node Progress<br>如果该节点是Leader，会通过 Map<long ,="" progress=""> 来存储其他节点的状态，包括每一个节点本地commit日志的index等，用来同步数据。</long></li>
+<li>Messages<br>再控制流转流程中，需要对外部发送的数据都会存放在Msg数组中</li>
+</ol>
+<h2 id="Message"><a href="#Message" class="headerlink" title="Message"></a>Message</h2><p>   定义了消息的状态信息，包括数据的信息，用以在不同节点中传输。消息是以Protbuf作为序列化</p>
+<h2 id="Storeage"><a href="#Storeage" class="headerlink" title="Storeage"></a>Storeage</h2><p>   定义数据的存储方式。代码中以MemoryStorage来存储，用以测试核心流程<br>   Unstable 和 Snapshot配合存在。</p>
+<h2 id="通信模块"><a href="#通信模块" class="headerlink" title="通信模块"></a>通信模块</h2><p>   通信模块也是可以自由实现，测试代码</p>
+<hr>
+<p>作者：3h_william<br>联系: <a href="https://github.com/3h-william" target="_blank" rel="external">https://github.com/3h-william</a><br>出处：<a href="http://3h-william.github.io">http://3h-william.github.io</a>  </p>
+<hr>
+
+        
         </div>
-    
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+
 </div>
+
+    <a data-url="http://3h-william.github.io/2019/01/09/raft/" data-id="cjqov2qmx000e3q090hutxstg" class="article-share-link"><i class="fa fa-share"></i>Share</a>
+<script>
+    (function ($) {
+        // Prevent duplicate binding
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+            
+    
+        <a href="http://3h-william.github.io/2019/01/09/raft/#comments" class="article-comment-link">Comments</a>
+    
+
+        </footer>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+    
+        <a href="/2017/02/25/akka_split_brain/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">Older</strong>
+            <div class="article-nav-title">Akka集群对于脑裂的策略</div>
+        </a>
+    
+</nav>
+
+
+    
+</article>
+
+
+    
+    <section id="comments">
+    
+        
+    <div id="uyan_frame"></div>
+
+    
+    </section>
+
 </section>
             
                 <aside id="sidebar">
